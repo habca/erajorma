@@ -2,7 +2,9 @@ package fi.linna.erajorma;
 
 public class Projektiokaavat {
 
-    /// From WGS84 to ETRS-TM35FIN conversion according to the JHS 197 EUREF-FIN.
+    /**
+     * From WGS84 to ETRS-TM35FIN conversion according to the JHS 197 EUREF-FIN.
+     */
     public static double[] degreesToMeters(double latitude, double longitude) {
 
         double f = 1 / 298.257222101;

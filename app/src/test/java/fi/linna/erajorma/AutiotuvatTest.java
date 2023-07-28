@@ -11,14 +11,16 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 /**
- * Lemmenkosken tupien Euref-Fin (~ WGS84)- ja ETRS-TM35FIN –koordinaatit.
+ * Tupien Euref-Fin (~ WGS84)- ja ETRS-TM35FIN –koordinaatit.
  */
 @RunWith(Parameterized.class)
-public class LemmenjokiTest {
+public class AutiotuvatTest {
 
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
+
+                // Lemmenjoki
                 { new double[] { 68, 42.0465 }, new double[] { 25, 59.5699 }, 7621332, 459173 }, // Härkäkoski
                 //{ new double[] { 68, 60.588 }, new double[] { 26, 25.042 }, 7610581, 469505 }, // Juntinoja
                 { new double[] { 68, 39.1804 }, new double[] { 25, 51.7932 }, 7616098, 453821 }, // Kultahamina
@@ -39,6 +41,18 @@ public class LemmenjokiTest {
                 { new double[] { 68, 16.0135 }, new double[] { 25, 40.6527 }, 7573206, 445356 }, // Uurrekarkea
                 { new double[] { 68, 47.5445 }, new double[] { 25, 36.6367 }, 7631849, 443912 }, // Vaskojoki
                 { new double[] { 68, 35.7976 }, new double[] { 25, 10.3348 }, 7610490, 425572 }, // Vaskolompolo
+
+                // Karhunkierros
+                { new double[] { 66, 19.7389 }, new double[] { 29, 31.8963 }, 7358875, 613393 }, // Aitaniitty
+                { new double[] { 66, 20.9317 }, new double[] { 29, 26.5978 }, 7360932, 609353 }, // Ansakämppä
+                { new double[] { 66, 18.2051 }, new double[] { 29, 31.1304 }, 7356004, 612937 }, // Jussinkämppä
+                { new double[] { 66, 24.5803 }, new double[] { 29, 09.2094 }, 7367230, 596153 }, // Puikkokämppä
+                { new double[] { 66, 24.0413 }, new double[] { 29, 07.2209 }, 7366179, 594708 }, // Ristikallio
+                { new double[] { 66, 25.9128 }, new double[] { 29, 09.3901 }, 7369709, 596202 }, // Savilampi
+                { new double[] { 66, 15.2416 }, new double[] { 29, 26.2119 }, 7350356, 609477 }, // Siilastupa
+                { new double[] { 66, 24.5227 }, new double[] { 29, 11.4147 }, 7367180, 597798 }, // Taivalköngäs
+                { new double[] { 66, 11.2080 }, new double[] { 29, 11.5117 }, 7342459, 598736 }, // Valtavaara
+
         });
     }
 
@@ -47,7 +61,7 @@ public class LemmenjokiTest {
     private double N;
     private double E;
 
-    public LemmenjokiTest(double[] lat, double[] lon, double N, double E) {
+    public AutiotuvatTest(double[] lat, double[] lon, double N, double E) {
         // Data driven test input.
         this.lat = lat;
         this.lon = lon;

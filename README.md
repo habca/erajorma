@@ -1,6 +1,6 @@
 # Eräjorma – GPS-paikannin
 
-Eräjorma-sovellus kertoo GPS-sijainnin noin 50 m tarkkuudella suomalaisten maastokarttojen karttaprojektiossa ETRS-TM35FIN ja geografisessa tasokoordinaatistossa ETRS89 (~WGS84) tai EUREF-FIN (~WGS84).
+Eräjorma-sovellus kertoo GPS-sijainnin noin 50 m tarkkuudella suomalaisten maastokarttojen karttaprojektiossa ETRS-TM35FIN ja geografisessa tasokoordinaatistossa ETRS89 (~WGS84), EUREF89 (~WGS84) tai EUREF-FIN (~WGS84).
 
 ## Käyttöohjeet
 
@@ -11,4 +11,5 @@ Eräjorma-sovellus kertoo GPS-sijainnin noin 50 m tarkkuudella suomalaisten maas
 ## Maastokartat
 - Pyhä Luosto, 1:25 000. Karttakeskus 2020. ISBN 978-952-266-512-6.
 - Saariselkä Sokosti, 1:50 000. Karttakeskus 2019. ISBN 978-952-266-583-6.
+- Karhunkierros, 1:25 000. Calazo 2019. ISBN 978-91-86773-48-9.
 - Lemmenjoki, 1:100 000/1:25 000. Calazo 2017. ISBN 978-91-88335-71-5.

@@ -1,13 +1,17 @@
 package fi.linna.erajorma;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import static org.junit.Assert.assertEquals;
+
+import androidx.annotation.NonNull;
 
 public class ProjektiokaavatTest {
 
     @Test
-    public void projectionFormulaTest() {
+    public void degreesToMetersTest() {
         double delta = 0.001;
 
         double f = 1 / 298.257222101;
@@ -90,45 +94,32 @@ public class ProjektiokaavatTest {
         assertEquals(106256.35961, E, delta);
     }
 
-    @Test
-    public void ProjectionTest() {
-        double latitude = 60.3851068722;
-        double longitude = 19.84813676944;
+    @RunWith(Parameterized.class)
+    public static class DegreesToMetersTest {
 
-        double[] result = Projektiokaavat.degreesToMeters(latitude, longitude);
+        private static double EPSILON = 0.1;
 
-        double N = result[0];
-        double E = result[1];
+        private double[] input;
 
-        assertEquals(6715706.37708, N, 0.001);
-        assertEquals(106256.35961, E, 0.001);
-    }
+        @Parameterized.Parameters
+        public static double[][] data() {
+            return new double[][] {
+                    { 60.3851068722, 19.84813676944, 6715706.37708, 106256.35961 },
+                    { 68.411994, 27.472200, 7588873.45, 519388.56 },
+                    { 61.000563, 25.766045, 6763478.58, 433264.43 },
+            };
+        }
 
-    @Test
-    public void LocationKiilopaaTest() {
-        double latitude = 68.411994;
-        double longitude = 27.472200;
+        public DegreesToMetersTest(@NonNull double[] input) {
+            this.input = input;
+        }
 
-        double[] result = Projektiokaavat.degreesToMeters(latitude, longitude);
+        @Test
+        public void degreesToMetersTest() {
+            double[] meters = Projektiokaavat.degreesToMeters(input[0], input[1]);
 
-        double N = result[0];
-        double E = result[1];
-
-        assertEquals(7588873.45, N, 0.1);
-        assertEquals(519388.56, E, 0.1);
-    }
-
-    @Test
-    public void LocationRattarinkatuTest() {
-        double latitude = 61.000563;
-        double longitude = 25.766045;
-
-        double[] result = Projektiokaavat.degreesToMeters(latitude, longitude);
-
-        double N = result[0];
-        double E = result[1];
-
-        assertEquals(6763478.58, N, 0.1);
-        assertEquals(433264.43, E, 0.1);
+            assertEquals(input[2], meters[0], EPSILON);
+            assertEquals(input[3], meters[1], EPSILON);
+        }
     }
 }

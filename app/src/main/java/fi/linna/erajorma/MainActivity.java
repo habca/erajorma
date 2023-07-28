@@ -34,6 +34,7 @@ import java.util.List;
 
 import maastokartat.Karhunkierros;
 import maastokartat.Lemmenjoki;
+import maastokartat.PyhaLuosto;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         List<String> maastokartat = new ArrayList<>();
         maastokartat.add(Karhunkierros.class.getCanonicalName());
         maastokartat.add(Lemmenjoki.class.getCanonicalName());
+        maastokartat.add(PyhaLuosto.class.getCanonicalName());
         maastokartat.sort(Karttamerkki.comparator());
 
         Spinner menu = findViewById(R.id.maastokartat);
@@ -143,11 +145,15 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void CreateListView(String maastokartta) {
         List<IKarttamerkki> karttamerkit = new ArrayList<>();
+
         if (Karhunkierros.class.getCanonicalName().equals(maastokartta)) {
             karttamerkit.addAll(new Karhunkierros());
         } else if (Lemmenjoki.class.getCanonicalName().equals(maastokartta)) {
             karttamerkit.addAll(new Lemmenjoki());
+        } else if (PyhaLuosto.class.getCanonicalName().equals(maastokartta)) {
+            karttamerkit.addAll(new PyhaLuosto());
         }
+
         karttamerkit.sort(Comparator.naturalOrder());
 
         ArrayAdapter<IKarttamerkki> adapter = new ArrayAdapter<>(

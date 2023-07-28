@@ -17,6 +17,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 import maastokartat.Karhunkierros;
 import maastokartat.Lemmenjoki;
+import maastokartat.PyhaLuosto;
 
 /**
  * Tupien Euref-Fin (~ WGS84)- ja ETRS-TM35FIN –koordinaatit.
@@ -29,6 +30,7 @@ public class KarttamerkkiTest {
         Collection<IKarttamerkki> data = new ArrayList<IKarttamerkki>();
         data.addAll(new Lemmenjoki());
         data.addAll(new Karhunkierros());
+        data.addAll(new PyhaLuosto());
         return data;
     }
 

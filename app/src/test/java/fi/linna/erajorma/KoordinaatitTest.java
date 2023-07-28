@@ -75,11 +75,27 @@ public class KoordinaatitTest {
     @Test
     public void degreesToDistanceTest() {
         double lat1 = Koordinaatit.dmsToDegrees(50, 3, 59);
-        double lon1 = Koordinaatit.dmsToDegrees(5, 42, 53);
+        double lon1 = Koordinaatit.dmsToDegrees(-5, -42, -53);
         double lat2 = Koordinaatit.dmsToDegrees(58, 38, 38);
-        double lon2 = Koordinaatit.dmsToDegrees(3, 4, 12);
+        double lon2 = Koordinaatit.dmsToDegrees(-3, -4, -12);
         double distance = Koordinaatit.degreesToDistance(lat1, lon1, lat2, lon2);
 
         assertEquals(968.8535, distance, EPSILON);
+    }
+
+    @Test
+    public void degreesToDirectionTest() {
+        double lat1 = Koordinaatit.dmsToDegrees(50, 3, 59);
+        double lon1 = Koordinaatit.dmsToDegrees(-5, -42, -53);
+        double lat2 = Koordinaatit.dmsToDegrees(58, 38, 38);
+        double lon2 = Koordinaatit.dmsToDegrees(-3, -4, -12);
+
+        double direction = Koordinaatit.degreesToDirection(lat1, lon1, lat2, lon2);
+        double[] dms = Koordinaatit.degreesToDms(direction);
+
+        assertEquals(9, Math.floor(direction), EPSILON);
+        assertEquals(9, Math.floor(dms[0]), EPSILON);
+        assertEquals(7, Math.floor(dms[1]), EPSILON);
+        assertEquals(11, Math.round(dms[2]), EPSILON);
     }
 }

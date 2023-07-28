@@ -1,6 +1,8 @@
 package fi.linna.erajorma;
 
-public interface IKarttamerkki {
+public interface IKarttamerkki extends Comparable<IKarttamerkki> {
+
+    String getName();
 
     /**
      * ~WGS84 -koordinaatti pohjoista leveyttä asteina.

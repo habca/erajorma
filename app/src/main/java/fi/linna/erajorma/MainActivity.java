@@ -8,12 +8,13 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.renderscript.RenderScript;
-import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -26,7 +27,13 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+
+import maastokartat.Karhunkierros;
+import maastokartat.Lemmenjoki;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button button = (Button) findViewById(R.id.navigaattori);
         button.setEnabled(false);
+
 
         TextView textView = (TextView) findViewById(R.id.koordinaatit);
         textView.setText("Receiving GPS signal...");
@@ -91,9 +99,65 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    @RequiresApi(api = Build.VERSION_CODES.N)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        CreateButton();
+        CreateSpinner();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void CreateSpinner() {
+        List<String> maastokartat = new ArrayList<>();
+        maastokartat.add(Karhunkierros.class.getCanonicalName());
+        maastokartat.add(Lemmenjoki.class.getCanonicalName());
+        maastokartat.sort(Karttamerkki.comparator());
+
+        Spinner menu = findViewById(R.id.maastokartat);
+        menu.setAdapter(new ArrayAdapter<>(
+                this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, maastokartat
+        ));
+
+        menu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                CreateListView(maastokartat.get(i));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                CreateListView("");
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void CreateButton() {
+        Button button = findViewById(R.id.navigaattori);
+        button.setOnClickListener(this::getLocation);
+        button.setText("GPS");
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void CreateListView(String maastokartta) {
+        List<IKarttamerkki> karttamerkit = new ArrayList<>();
+        if (Karhunkierros.class.getCanonicalName().equals(maastokartta)) {
+            karttamerkit.addAll(new Karhunkierros());
+        } else if (Lemmenjoki.class.getCanonicalName().equals(maastokartta)) {
+            karttamerkit.addAll(new Lemmenjoki());
+        }
+        karttamerkit.sort(Comparator.naturalOrder());
+
+        ArrayAdapter<IKarttamerkki> adapter = new ArrayAdapter<>(
+                this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, karttamerkit
+        );
+
+        ListView view = findViewById(R.id.karttamerkit);
+        view.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

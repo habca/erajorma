@@ -5,7 +5,10 @@ import static org.junit.Assert.assertEquals;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,5 +52,28 @@ public class KarttamerkkiTest {
 
         assertEquals(karttamerkki.getNorth(), meters[0], 1);
         assertEquals(karttamerkki.getEast(), meters[1], 1);
+    }
+
+    @Test
+    public void compareToTest() {
+        List<String> mjonot;
+
+        mjonot = Arrays.asList(new String[] {"aaa", "aaa"});
+        mjonot.sort(Karttamerkki.comparator());
+
+        assertEquals(0, "aaa".compareTo("aaa"));
+        assertEquals("aaa", mjonot.get(0));
+
+        mjonot = Arrays.asList(new String[] {"aa", "aaa"});
+        mjonot.sort(Karttamerkki.comparator());
+
+        assertEquals(-1, "aa".compareTo("aaa"));
+        assertEquals("aaa", mjonot.get(0));
+
+        mjonot = Arrays.asList(new String[] {"aab", "aaa"});
+        mjonot.sort(Karttamerkki.comparator());
+
+        assertEquals(1, "aab".compareTo("aaa"));
+        assertEquals("aaa", mjonot.get(0));
     }
 }

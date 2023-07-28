@@ -10,8 +10,8 @@ public class Karttamerkki implements IKarttamerkki, Comparable<IKarttamerkki> {
     private double E;
 
     public Karttamerkki(String name, double[] lat, double[] lon) {
-        double latitude = Koordinaatit.DmsToDegrees(lat);
-        double longitude = Koordinaatit.DmsToDegrees(lon);
+        double latitude = Koordinaatit.dmsToDegrees(lat);
+        double longitude = Koordinaatit.dmsToDegrees(lon);
         double[] meters = Projektiokaavat.degreesToMeters(latitude, longitude);
 
         this.name = name;

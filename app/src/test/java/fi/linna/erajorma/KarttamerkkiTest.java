@@ -7,13 +7,11 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 import maastokartat.Karhunkierros;
 import maastokartat.Lemmenjoki;
@@ -22,42 +20,45 @@ import maastokartat.PyhaLuosto;
 /**
  * Tupien Euref-Fin (~ WGS84)- ja ETRS-TM35FIN –koordinaatit.
  */
-@RunWith(Parameterized.class)
 public class KarttamerkkiTest {
 
-    @Parameters
-    public static Collection<IKarttamerkki> data() {
-        Collection<IKarttamerkki> data = new ArrayList<IKarttamerkki>();
-        data.addAll(new Lemmenjoki());
-        data.addAll(new Karhunkierros());
-        data.addAll(new PyhaLuosto());
-        return data;
-    }
+    @RunWith(Parameterized.class)
+    public static class DegreesToMetersTest {
 
-    @NonNull
-    private IKarttamerkki karttamerkki;
+        @NonNull
+        private IKarttamerkki input;
 
-    /**
-     * Karttamerkki encapsulates location information as coordinates.
-     * @param karttamerkki data driven test input and expected result.
-     */
-    public KarttamerkkiTest(@NonNull IKarttamerkki karttamerkki) {
-        this.karttamerkki = karttamerkki;
+        @Parameterized.Parameters
+        public static Collection<IKarttamerkki> data() {
+            Collection<IKarttamerkki> data = new ArrayList<>();
+            data.addAll(new Lemmenjoki());
+            data.addAll(new Karhunkierros());
+            data.addAll(new PyhaLuosto());
+            return data;
+        }
+
+        /**
+         * Karttamerkki encapsulates location information as coordinates.
+         * @param input data driven test input and expected result.
+         */
+        public DegreesToMetersTest(@NonNull IKarttamerkki input) {
+            this.input = input;
+        }
+
+        @Test
+        public void degreesToMetersTest() {
+            double degrees_lat = Koordinaatit.dmsToDegrees(input.getLatitude());
+            double degrees_lon = Koordinaatit.dmsToDegrees(input.getLongitude());
+
+            double[] meters = Projektiokaavat.degreesToMeters(degrees_lat, degrees_lon);
+
+            assertEquals(input.getNorth(), meters[0], 1);
+            assertEquals(input.getEast(), meters[1], 1);
+        }
     }
 
     @Test
-    public void RunTest() {
-        double degrees_lat = Koordinaatit.DmsToDegrees(karttamerkki.getLatitude());
-        double degrees_lon = Koordinaatit.DmsToDegrees(karttamerkki.getLongitude());
-
-        double[] meters = Projektiokaavat.degreesToMeters(degrees_lat, degrees_lon);
-
-        assertEquals(karttamerkki.getNorth(), meters[0], 1);
-        assertEquals(karttamerkki.getEast(), meters[1], 1);
-    }
-
-    @Test
-    public void compareToTest() {
+    public void comparatorTest() {
         List<String> mjonot;
 
         mjonot = Arrays.asList(new String[] {"aaa", "aaa"});

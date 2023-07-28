@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 public class ProjektiokaavatTest {
 
     @Test
-    public void ProjectionFormulaTest() {
+    public void projectionFormulaTest() {
         double delta = 0.001;
 
         double f = 1 / 298.257222101;

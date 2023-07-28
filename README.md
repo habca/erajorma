@@ -2,6 +2,12 @@
 
 Eräjorma-sovellus kertoo GPS-sijainnin noin 50 m tarkkuudella suomalaisten maastokarttojen karttaprojektiossa ETRS-TM35FIN ja geografisessa tasokoordinaatistossa ETRS89 (~WGS84), EUREF89 (~WGS84) tai EUREF-FIN (~WGS84).
 
+## Käyttöoikeudet
+
+Tarkka sijainti vaaditaan, muuten sovellus ei käynnisty.
+
+![alt Tarkka sijainti](images/permission.png)
+
 ## Käyttöohjeet
 
 1. Luetaan numeerinen sijainti kartan ruudukolta.

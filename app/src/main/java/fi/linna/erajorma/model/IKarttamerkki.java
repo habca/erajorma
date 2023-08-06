@@ -1,6 +1,8 @@
-package fi.linna.erajorma;
+package fi.linna.erajorma.model;
 
-public interface IKarttamerkki extends Comparable<IKarttamerkki> {
+import java.io.Serializable;
+
+public interface IKarttamerkki extends IInformation, Serializable, Comparable<IKarttamerkki> {
 
     String getName();
 
@@ -23,7 +25,7 @@ public interface IKarttamerkki extends Comparable<IKarttamerkki> {
     double getNorth();
 
     /**
-     * ETRS-TM35FIN east coordinate as meters.
+     * ETRS-TM35FIN -koordinaatti itäsitä pituutta metreinä.
      * @return etäisyys keskimeridiaanista 27 pituuspiiri on 500 000 m.
      */
     double getEast();

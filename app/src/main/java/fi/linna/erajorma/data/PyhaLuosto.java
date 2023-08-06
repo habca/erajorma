@@ -1,10 +1,10 @@
-package maastokartat;
+package fi.linna.erajorma.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import fi.linna.erajorma.IKarttamerkki;
-import fi.linna.erajorma.Karttamerkki;
+import fi.linna.erajorma.model.IKarttamerkki;
+import fi.linna.erajorma.model.Karttamerkki;
 
 public class PyhaLuosto extends ArrayList<IKarttamerkki> {
     /**

@@ -8,6 +8,8 @@ import static org.junit.Assert.assertEquals;
 
 import androidx.annotation.NonNull;
 
+import fi.linna.erajorma.model.Projektiokaavat;
+
 public class ProjektiokaavatTest {
 
     @Test

@@ -1,13 +1,14 @@
-package fi.linna.erajorma;
+package fi.linna.erajorma.model;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class Karttamerkki implements IKarttamerkki, Comparable<IKarttamerkki> {
-    private String name;
-    private double[] lat;
-    private double[] lon;
-    private double N;
-    private double E;
+public class Karttamerkki implements IKarttamerkki, IInformation, Serializable {
+    public String name;
+    public double[] lat;
+    public double[] lon;
+    public double N;
+    public double E;
 
     public Karttamerkki(String name, double[] lat, double[] lon) {
         double latitude = Koordinaatit.dmsToDegrees(lat);
@@ -65,6 +66,7 @@ public class Karttamerkki implements IKarttamerkki, Comparable<IKarttamerkki> {
         return comparator().compare(this.getName(), other.getName());
     }
 
+    @SuppressWarnings("ReassignedVariable")
     public static Comparator<String> comparator() {
         return (str1, str2) -> {
             byte[] xs = str1.getBytes();
@@ -75,5 +77,16 @@ public class Karttamerkki implements IKarttamerkki, Comparable<IKarttamerkki> {
             }
             return ys.length - xs.length;
         };
+    }
+
+    @Override
+    public Information getInformation() {
+        return new Information(new String[][] {
+                new String[] { "Name", getName() },
+                new String[] { "lat", String.format("%.0f\u00B0 %.4f\u2032 (~WGS84)", lat[0], lat[1]) },
+                new String[] { "lon", String.format("%.0f\u00B0 %.4f\u2032 (~WGS84)", lon[0], lon[1]) },
+                new String[] { "N", String.format("%.0f (ETRS-TM35FIN)", getNorth()) },
+                new String[] { "E", String.format("%.0f (ETRS-TM35FIN)", getEast()) },
+        });
     }
 }

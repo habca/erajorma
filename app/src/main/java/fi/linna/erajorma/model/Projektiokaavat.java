@@ -1,4 +1,4 @@
-package fi.linna.erajorma;
+package fi.linna.erajorma.model;
 
 public class Projektiokaavat {
 

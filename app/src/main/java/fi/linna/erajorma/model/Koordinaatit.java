@@ -1,6 +1,4 @@
-package fi.linna.erajorma;
-
-import androidx.annotation.NonNull;
+package fi.linna.erajorma.model;
 
 public class Koordinaatit {
 
@@ -8,7 +6,7 @@ public class Koordinaatit {
      * Convert degrees decimal part to minutes and seconds.
      * @return [degrees, minutes, seconds]
      */
-    public static @NonNull double[] degreesToDms(double degrees) {
+    public static double[] degreesToDms(double degrees) {
         final double mmm = minutesToSeconds(degrees);
         final double sss = minutesToSeconds(mmm);
         return new double[] { degrees, mmm, sss };
@@ -28,7 +26,7 @@ public class Koordinaatit {
      * @param dms [degrees, minutes, seconds]
      * @return degrees
      */
-    public static double dmsToDegrees(@NonNull double... dms) {
+    public static double dmsToDegrees(double... dms) {
         if (dms.length == 3) {
             final double mmm = dms[1] + dms[2] / 60;
             final double ddd = dms[0] + mmm / 60;

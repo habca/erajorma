@@ -11,6 +11,8 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 
+import fi.linna.erajorma.model.Koordinaatit;
+
 public class KoordinaatitTest {
 
     private static double EPSILON = 0.0001;

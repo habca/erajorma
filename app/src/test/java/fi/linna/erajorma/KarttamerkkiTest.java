@@ -13,9 +13,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import maastokartat.Karhunkierros;
-import maastokartat.Lemmenjoki;
-import maastokartat.PyhaLuosto;
+import fi.linna.erajorma.data.Karhunkierros;
+import fi.linna.erajorma.data.Lemmenjoki;
+import fi.linna.erajorma.data.PyhaLuosto;
+import fi.linna.erajorma.model.IKarttamerkki;
+import fi.linna.erajorma.model.Karttamerkki;
+import fi.linna.erajorma.model.Koordinaatit;
+import fi.linna.erajorma.model.Projektiokaavat;
 
 /**
  * Tupien Euref-Fin (~ WGS84)- ja ETRS-TM35FIN –koordinaatit.

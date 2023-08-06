@@ -26,3 +26,26 @@ Tarkka sijainti vaaditaan, muuten sovellus ei käynnisty.
 ## Kompassit
 
 - Suunto A-30
+
+## Development
+
+This section explains how to set up a development environment for Arch Linux.
+
+### Android Studio
+
+A package manager Snap provides automatic updates which is convenient, but classic confinement requires the `/snap` directory. To allow the installation of classic snaps, create a symbolic link between `/var/lib/snapd/snap` and `/snap`. [1]
+
+```
+git clone https://aur.archlinux.org/snapd.git
+cd snapd
+makepkg -sr
+pacman -U *.pkg.tar.zst
+
+systemctl enable --now snapd.socket
+ln -s /var/lib/snapd/snap /snap
+snap install android-studio --classic
+```
+
+## References
+
+- [1] <https://wiki.archlinux.org/title/Snap#Classic_snaps>

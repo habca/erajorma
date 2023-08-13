@@ -281,5 +281,13 @@ public class ProjektiokaavatTest {
             assertEquals(input[2], meters[0], EPSILON);
             assertEquals(input[3], meters[1], EPSILON);
         }
+
+        @Test
+        public void metersToDegreesTest() {
+            double[] degrees = Projektiokaavat.metersToDegrees(input[2], input[3]);
+
+            assertEquals(input[0], degrees[0], EPSILON);
+            assertEquals(input[1], degrees[1], EPSILON);
+        }
     }
 }

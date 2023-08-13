@@ -15,7 +15,7 @@ public class Lemmenjoki extends ArrayList<Karttamerkki> {
                 new Karttamerkki("Härkäkoski", new double[] { 68, 42.0465 }, new double[] { 25, 59.5699 }, 7621332, 459173),
 
                 // Maastokartan ETRS-TM35FIN -koordinaatit eivät täsmää Euref-Fin (~WGS84) -koordinaatteihin.
-                // new Autiotupa("Juntinoja", new double[] { 68, 60.588 }, new double[] { 26, 25.042 }, 7610581, 469505),
+                // new Karttamerkki("Juntinoja", new double[] { 68, 60.588 }, new double[] { 26, 25.042 }, 7610581, 469505),
                 new Karttamerkki("Juntinoja", new double[] { 68, 60.588 }, new double[] { 26, 25.042 }),
 
                 new Karttamerkki("Kultahamina", new double[] { 68, 39.1804 }, new double[] { 25, 51.7932 }, 7616098, 453821),

@@ -25,7 +25,7 @@ public interface IKarttamerkki extends IInformation, Serializable, Comparable<IK
     double getNorth();
 
     /**
-     * ETRS-TM35FIN -koordinaatti itäsitä pituutta metreinä.
+     * ETRS-TM35FIN -koordinaatti itäistä pituutta metreinä.
      * @return etäisyys keskimeridiaanista 27 pituuspiiri on 500 000 m.
      */
     double getEast();

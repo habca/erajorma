@@ -7,23 +7,31 @@ public class Projektiokaavat {
      */
     public static double[] degreesToMeters(double latitude, double longitude) {
 
-        double f = 1 / 298.257222101;
-        double e_toiseen = (2.0 * f) - Math.pow(f, 2);
-
-        double lambda_nolla = 0.471238898;
-        double k_nolla = 0.9996;
-        double E_nolla = 500000;
+        // GRS80-vertausellipsoidin parametrit:
 
         double a = 6378137;
+        double f = 1 / 298.257222101;
+
+        // Karttaprojektion parametrit:
+
+        double k_nolla = 0.9996;
+        double lambda_nolla = Math.toRadians(27); // 27 E
+        double E_nolla = 500000; // m
+
+        // Apusuureet:
+
         double n = f / (2.0 - f);
         double A1 = (a / (1.0 + n)) * (1.0 + (Math.pow(n, 2) / 4.0) + (Math.pow(n, 4) / 64.0));
+        double e_toiseen = (2.0 * f) - Math.pow(f, 2);
 
         double h1_pilkku = 1.0 / 2.0 * Math.pow(n, 1) - 2.0 / 3.0 * Math.pow(n, 2) + 5.0 / 16.0 * Math.pow(n, 3) + 41.0 / 180.0 * Math.pow(n, 4);
         double h2_pilkku = 13.0 / 48.0 * Math.pow(n, 2) - 3.0 / 5.0 * Math.pow(n, 3) + 557.0 / 1440.0 * Math.pow(n, 4);
         double h3_pilkku = 61.0 / 240.0 * Math.pow(n, 3) - 103.0 / 140.0 * Math.pow(n, 4);
         double h4_pilkku = 49561.0 / 161280.0 * Math.pow(n, 4);
 
-        double fii = Math.toRadians(latitude) ;
+        // Tasokoordinaateista geodeettisiksi koordinaateiksi
+
+        double fii = Math.toRadians(latitude);
         double lambda = Math.toRadians(longitude);
 
         double Q_pilkku = Projektiokaavat.arcsinh(Math.tan(fii));
@@ -55,8 +63,77 @@ public class Projektiokaavat {
         return new double[] { N, E };
     }
 
+    /**
+     * From ETRS-TM35FIN to WGS84 conversion according to the JHS 197 EUREF-FIN.
+     */
+    public static double[] metersToDegrees(double north, double east) {
+
+        // GRS80-vertausellipsoidin parametrit:
+
+        double a = 6378137; // m
+        double f = 1 / 298.257222101;
+
+        // Karttaprojektion parametrit:
+
+        double k_nolla = 0.9996;
+        double lambda_nolla = Math.toRadians(27); // 27 E
+        double E_nolla = 500000; // m
+
+        // Apusuureet:
+
+        double n = f / (2.0 - f);
+        double A1 = (a / (1.0 + n)) * (1.0 + (Math.pow(n, 2) / 4.0) + (Math.pow(n, 4) / 64.0));
+        double e_toiseen = (2.0 * f) - Math.pow(f, 2);
+
+        double h1 = 1.0 / 2.0 * n - 2.0 / 3.0 * Math.pow(n, 2.0) + 37.0 / 96.0 * Math.pow(n, 3.0) - 1.0 / 360.0 * Math.pow(n, 4.0);
+        double h2 = 1.0 / 48.0 * Math.pow(n, 2.0) + 1.0 / 15.0 * Math.pow(n, 3.0) - 437.0 / 1440.0 * Math.pow(n, 4.0);
+        double h3 = 17.0 / 480 * Math.pow(n, 3.0) - 37.0 / 840.0 * Math.pow(n, 4.0);
+        double h4 = 4397.0 / 161280.0 * Math.pow(n, 4.0);
+
+        // Tasokoordinaateista geodeettisiksi koordinaateiksi
+
+        double N = north;
+        double E = east;
+
+        double zeeta = N / (A1 * k_nolla);
+        double eeta = (E - E_nolla) / (A1 * k_nolla);
+
+        double zeeta1_pilkku = h1 * Math.sin(2.0 * zeeta) * Math.cosh(2.0 * eeta);
+        double zeeta2_pilkku = h2 * Math.sin(4.0 * zeeta) * Math.cosh(4.0 * eeta);
+        double zeeta3_pilkku = h3 * Math.sin(6.0 * zeeta) * Math.cosh(6.0 * eeta);
+        double zeeta4_pilkku = h4 * Math.sin(8.0 * zeeta) * Math.cosh(8.0 * eeta);
+
+        double eeta1_pilkku = h1 * Math.cos(2.0 * zeeta) * Math.sinh(2.0 * eeta);
+        double eeta2_pilkku = h2 * Math.cos(4.0 * zeeta) * Math.sinh(4.0 * eeta);
+        double eeta3_pilkku = h3 * Math.cos(6.0 * zeeta) * Math.sinh(6.0 * eeta);
+        double eeta4_pilkku = h4 * Math.cos(8.0 * zeeta) * Math.sinh(8.0 * eeta);
+
+        double zeeta_pilkku = zeeta - zeeta1_pilkku - zeeta2_pilkku - zeeta3_pilkku - zeeta4_pilkku;
+        double eeta_pilkku = eeta - eeta1_pilkku - eeta2_pilkku - eeta3_pilkku - eeta4_pilkku;
+
+        double beeta = Math.asin(Projektiokaavat.sech(eeta_pilkku) * Math.sin(zeeta_pilkku));
+        double l = Math.asin(Math.tanh(eeta_pilkku) / Math.cos(beeta));
+
+        double Q = Projektiokaavat.arcsinh(Math.tan(beeta));
+        double Q_pilkku = Q + Math.sqrt(e_toiseen) * Projektiokaavat.arctanh(Math.sqrt(e_toiseen) * Math.tanh(Q));
+
+        // Käytännössä riittää kolme iteraatiokierrosta.
+
+        for (int i = 0; i < 4; i++) {
+            Q_pilkku = Q + Math.sqrt(e_toiseen) * Projektiokaavat.arctanh(Math.sqrt(e_toiseen) * Math.tanh(Q_pilkku));
+        }
+
+        double fii = Math.atan((Math.sinh(Q_pilkku))); // rad
+        double lambda = lambda_nolla + l; // rad
+
+        double latitude = Math.toDegrees(fii);
+        double longitude = Math.toDegrees(lambda);
+
+        return new double[] { latitude, longitude };
+    }
+
     public static double arcsinh(double x) {
-        return Math.log(x + Math.sqrt(x * x + 1.0));
+        return Math.log(x + Math.sqrt(Math.pow(x, 2.0) + 1.0));
     }
 
     public static double arctanh(double x) {

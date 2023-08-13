@@ -254,6 +254,34 @@ public class ProjektiokaavatTest {
         assertEquals(53.292368, longitude[2], 0.000001);
     }
 
+    @Test
+    public void degreesToUtmTest_1() {
+        double latitude = 51.0;
+        double longitude = 10.0;
+
+        double utmNorthing = Projektiokaavat.CalculateUTMNorthing(latitude, longitude);
+        double utmEasting = Projektiokaavat.CalculateUTMEasting(latitude, longitude);
+        String utmZone = Projektiokaavat.CalculateUTMZone(latitude, longitude);
+
+        assertEquals(5650300.787, utmNorthing,0.001);
+        assertEquals(570168.862, utmEasting,0.001);
+        assertEquals("32U", utmZone);
+    }
+
+    @Test
+    public void degreesToUtmTest_2() {
+        double latitude = 69.508514;
+        double longitude = 17.422789;
+
+        double utmNorthing = Projektiokaavat.CalculateUTMNorthing(latitude, longitude);
+        double utmEasting = Projektiokaavat.CalculateUTMEasting(latitude, longitude);
+        String utmZone = Projektiokaavat.CalculateUTMZone(latitude, longitude);
+
+        assertEquals(7712940.005, utmNorthing,0.002);
+        assertEquals(594634.016, utmEasting,0.001);
+        assertEquals("33W", utmZone);
+    }
+
     @RunWith(Parameterized.class)
     public static class DegreesToMetersTest {
 

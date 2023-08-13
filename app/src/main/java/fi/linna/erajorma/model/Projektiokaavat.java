@@ -143,4 +143,128 @@ public class Projektiokaavat {
     public static double sech(double x) {
         return 1.0 / Math.cosh(x);
     }
+
+    /**
+     * From WGS84 to UTM conversion.
+     */
+    public static double CalculateUTMNorthing(double latitude, double longitude) {
+
+        int utmZone = (int) Math.floor((longitude + 180.0) / 6.0) + 1;
+
+        int hemisphere = latitude < 0 ? -1 : 1;
+
+        double CentralMeridian = (utmZone - 1.0) * 6.0 - 180.0 + 3.0;
+
+        double ScaleFactor = 0.9996;
+
+        double EquatorialRadius = 6378137;
+
+        double EccentricitySquared = 0.00669438;
+
+        double N = EquatorialRadius / Math.sqrt(1.0 - EccentricitySquared * Math.pow(Math.sin(latitude * 3.14159265358979 / 180.0), 2.0));
+
+        double T = Math.pow(Math.tan(latitude * 3.14159265358979 / 180.0), 2.0);
+
+        double C = EccentricitySquared * Math.pow(Math.cos(latitude * 3.14159265358979 / 180.0), 2.0);
+
+        double A = Math.cos(latitude * 3.14159265358979 / 180.0) * (longitude - CentralMeridian) * 3.14159265358979 / 180.0;
+
+        double M = EquatorialRadius * ((1.0 - EccentricitySquared / 4.0 - 3.0 * Math.pow(EccentricitySquared, 2.0) / 64.0 - 5.0 * Math.pow(EccentricitySquared, 3.0) / 256.0) * latitude * 3.14159265358979 / 180.0 - (3.0 * EccentricitySquared / 8.0 + 3.0 * Math.pow(EccentricitySquared, 2.0) / 32.0 + 45.0 * Math.pow(EccentricitySquared, 3.0) / 1024.0) * Math.sin(2.0 * latitude * 3.14159265358979 / 180.0) + (15.0 * Math.pow(EccentricitySquared, 2.0) / 256.0 + 45.0 * Math.pow(EccentricitySquared, 3.0) / 1024.0) * Math.sin(4.0 * latitude * 3.14159265358979 / 180.0) - (35.0 * Math.pow(EccentricitySquared, 3.0) / 3072.0) * Math.sin(6.0 * latitude * 3.14159265358979 / 180.0));
+
+        double UTMScaleFactor = 0.9996;
+
+        double UTMFalseNorthing = hemisphere == 1 ? 0.0 : 10000000.0;
+
+        double UTMNorthing = UTMScaleFactor * (M + N * Math.tan(latitude * 3.14159265358979 / 180.0) * (Math.pow(A, 2.0) / 2.0 + (5.0 - T + 9.0 * C + 4.0 * Math.pow(C, 2.0)) * Math.pow(A, 4.0) / 24.0 + (61.0 - 58.0 * T + Math.pow(T, 2.0) + 600.0 * C - 330.0 * EccentricitySquared) * Math.pow(A, 6.0) / 720.0)) + UTMFalseNorthing;
+
+        return UTMNorthing;
+    }
+
+    /**
+     * From WGS84 to UTM conversion.
+     */
+    public static double CalculateUTMEasting(double latitude, double longitude) {
+
+        int utmZone = (int) Math.floor((longitude + 180.0) / 6.0) + 1;
+
+        double CentralMeridian = (utmZone - 1.0) * 6.0 - 180.0 + 3.0;
+
+        double ScaleFactor = 0.9996;
+
+        double EquatorialRadius = 6378137;
+
+        double EccentricitySquared = 0.00669438;
+
+        double N = EquatorialRadius / Math.sqrt(1.0 - EccentricitySquared * Math.pow(Math.sin(latitude * 3.14159265358979 / 180.0), 2.0));
+
+        double T = Math.pow(Math.tan(latitude * 3.14159265358979 / 180.0), 2.0);
+
+        double C = EccentricitySquared * Math.pow(Math.cos(latitude * 3.14159265358979 / 180.0), 2.0);
+
+        double A = Math.cos(latitude * 3.14159265358979 / 180.0) * (longitude - CentralMeridian) * 3.14159265358979 / 180.0;
+
+        double M = EquatorialRadius * ((1.0 - EccentricitySquared / 4.0 - 3.0 * Math.pow(EccentricitySquared, 2.0) / 64.0 - 5.0 * Math.pow(EccentricitySquared, 3.0) / 256.0) * latitude * 3.14159265358979 / 180.0 - (3.0 * EccentricitySquared / 8.0 + 3.0 * Math.pow(EccentricitySquared, 2.0) / 32.0 + 45.0 * Math.pow(EccentricitySquared, 3.0) / 1024.0) * Math.sin(2.0 * latitude * 3.14159265358979 / 180.0) + (15.0 * Math.pow(EccentricitySquared, 2.0) / 256.0 + 45.0 * Math.pow(EccentricitySquared, 3.0) / 1024.0) * Math.sin(4.0 * latitude * 3.14159265358979 / 180.0) - (35.0 * Math.pow(EccentricitySquared, 3.0) / 3072.0) * Math.sin(6.0 * latitude * 3.14159265358979 / 180.0));
+
+        double UTMEasting = ScaleFactor * N * (A + (1.0 - T + C) * Math.pow(A, 3.0) / 6.0 + (5.0 - 18.0 * T + Math.pow(T, 2.0) + 72.0 * C - 58.0 * EccentricitySquared) * Math.pow(A, 5.0) / 120.0) + 500000.0;
+
+        return UTMEasting;
+    }
+
+    /**
+     * From WGS84 to UTM conversion.
+     */
+    public static String CalculateUTMZone(double latitude, double longitude) {
+
+        int utmZone = (int) Math.floor((longitude + 180.0) / 6.0) + 1;
+
+        String LatitudeBand;
+
+        if (latitude >= 0) {
+            if (latitude >= 0 && latitude < 8) {
+                LatitudeBand = "N";
+            } else if (latitude >= 8 && latitude < 16) {
+                LatitudeBand = "P";
+            } else if (latitude >= 16 && latitude < 24) {
+                LatitudeBand = "Q";
+            } else if (latitude >= 24 && latitude < 32) {
+                LatitudeBand = "R";
+            } else if (latitude >= 32 && latitude < 40) {
+                LatitudeBand = "S";
+            } else if (latitude >= 40 && latitude < 48) {
+                LatitudeBand = "T";
+            } else if (latitude >= 48 && latitude < 56) {
+                LatitudeBand = "U";
+            } else if (latitude >= 56 && latitude < 64) {
+                LatitudeBand = "V";
+            } else if (latitude >= 64 && latitude < 72) {
+                LatitudeBand = "W";
+            } else {
+                LatitudeBand = "X";
+            }
+        } else {
+            if (latitude < 0 && latitude >= -8) {
+                LatitudeBand = "M";
+            } else if (latitude < -8 && latitude >= -16) {
+                LatitudeBand = "L";
+            } else if (latitude < -16 && latitude >= -24) {
+                LatitudeBand = "K";
+            } else if (latitude < -24 && latitude >= -32) {
+                LatitudeBand = "J";
+            } else if (latitude < -32 && latitude >= -40) {
+                LatitudeBand = "H";
+            } else if (latitude < -40 && latitude >= -48) {
+                LatitudeBand = "G";
+            } else if (latitude < -48 && latitude >= -56) {
+                LatitudeBand = "F";
+            } else if (latitude < -56 && latitude >= -64) {
+                LatitudeBand = "E";
+            } else if (latitude < -64 && latitude >= -72) {
+                LatitudeBand = "D";
+            } else {
+                LatitudeBand = "C";
+            }
+        }
+
+        return utmZone + LatitudeBand;
+    }
 }

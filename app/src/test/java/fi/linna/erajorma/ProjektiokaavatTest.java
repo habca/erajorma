@@ -255,31 +255,240 @@ public class ProjektiokaavatTest {
     }
 
     @Test
+    public void degreesToUtmTest() {
+
+        double latitude = Koordinaatit.dmsToDegrees(40, 30, 0);
+        assertEquals(40.5, latitude, 0.00000001);
+
+        double longitude = Koordinaatit.dmsToDegrees(73, 30, 0);
+        assertEquals(73.5, longitude, 0.00000001);
+
+        String zone = Projektiokaavat.getUtmZone(latitude, longitude);
+        assertEquals("43T", zone);
+
+        int zone_num = Projektiokaavat.getUtmZoneNumber(zone);
+        assertEquals(zone_num, 43);
+
+        int falseEasting = Projektiokaavat.getUtmFalseEasting(zone);
+        assertEquals(-1, falseEasting);
+
+        int falseNorthing = Projektiokaavat.getUtmFalseNorthing(zone);
+        assertEquals(-1, falseNorthing);
+
+        // GRS80-vertausellipsoidin parametrit:
+
+        double a = 6378206.4; // Equatorial radius
+
+        // Karttaprojektion parametrit:
+
+        double k_nolla = 0.9996; // Central scale factor
+
+        double lambda_nolla = Math.toRadians((zone_num - 1.0) * 6.0 - 180.0 + 3.0); // Central meridian
+        assertEquals(75, Math.toDegrees(lambda_nolla), 0.00000001);
+
+        double E_nolla = falseEasting == 1 ? 0.0 : 500000.0; // False easting
+        assertEquals(500000.0, E_nolla, 0.00000001);
+
+        double N_nolla = falseNorthing == 1 ? 10000000.0 : 0.0; // False northing
+        assertEquals(0.0, N_nolla, 0.00000001);
+
+        // Apusuureet:
+
+        double e_toiseen = 0.00676866; // Eccentricity squared
+
+        // Geodeettisista koordinaateista UTM-koordinaateiksi
+
+        double fii = Math.toRadians(latitude);
+        double fii_nolla = Math.toRadians(0); // Origin (UTM Zone)
+        double lambda = Math.toRadians(longitude);
+
+        double e_pilkku_toiseen = e_toiseen / (1.0 - e_toiseen);
+        assertEquals(0.0068148, e_pilkku_toiseen, 0.0000001);
+
+        double N = a / Math.sqrt(1.0 - e_toiseen * Math.pow(Math.sin(fii), 2.0));
+        assertEquals(6387330.5, N, 0.1);
+
+        double T = Math.pow(Math.tan(fii), 2.0);
+        assertEquals(0.7294538, T, 0.0000001);
+
+        double C = e_pilkku_toiseen * Math.pow(Math.cos(fii), 2.0);
+        assertEquals(0.0039404, C, 0.0000001);
+
+        double A = (falseEasting * lambda - falseEasting * lambda_nolla) * Math.cos(fii);
+        assertEquals(0.0199074, A, 0.0000001);
+
+        double M = a * ((1.0 - e_toiseen / 4.0 - 3.0 * Math.pow(e_toiseen, 2.0) / 64.0 - 5.0 * Math.pow(e_toiseen, 3.0) / 256.0) * fii - (3.0 * e_toiseen / 8.0 + 3.0 * Math.pow(e_toiseen, 2.0) / 32.0 +
+                45.0 * Math.pow(e_toiseen, 3.0) / 1024.0) * Math.sin(2.0 * fii) + (15.0 * Math.pow(e_toiseen, 2.0) / 256.0 + 45.0 * Math.pow(e_toiseen, 3.0) / 1024.0) * Math.sin(4.0 * fii) -
+                (35.0 * Math.pow(e_toiseen, 3.0) / 3072.0) * Math.sin(6.0 * fii));
+        assertEquals(4484837.67, M, 0.01);
+
+        double M_nolla = a * ((1.0 - e_toiseen / 4.0 - 3.0 * Math.pow(e_toiseen, 2.0) / 64.0 - 5.0 * Math.pow(e_toiseen, 3.0) / 256.0) * fii_nolla - (3.0 * e_toiseen / 8.0 + 3.0 * Math.pow(e_toiseen, 2.0) / 32.0 +
+                45.0 * Math.pow(e_toiseen, 3.0) / 1024.0) * Math.sin(2.0 * fii_nolla) + (15.0 * Math.pow(e_toiseen, 2.0) / 256.0 + 45.0 * Math.pow(e_toiseen, 3.0) / 1024.0) * Math.sin(4.0 * fii_nolla) -
+                (35.0 * Math.pow(e_toiseen, 3.0) / 3072.0) * Math.sin(6.0 * fii_nolla));
+        assertEquals(0.00, M_nolla, 0.01);
+
+        double x = k_nolla * N * (A + (1.0 - T + C) * Math.pow(A, 3.0) / 6.0 + (5.0 - 18.0 * T + Math.pow(T, 2.0) + 72.0 * C - 58.0 * e_pilkku_toiseen) * Math.pow(A, 5.0) / 120.0) + E_nolla;
+        assertEquals(127106.5 + E_nolla, x, 0.1);
+
+        double y = k_nolla * (M - M_nolla + N * Math.tan(fii) * (Math.pow(A, 2.0) / 2.0 + (5.0 - T + 9.0 * C + 4.0 * Math.pow(C, 2.0)) * Math.pow(A, 4.0) / 24.0 +
+                (61.0 - 58.0 * T + Math.pow(T, 2.0) + 600.0 * C - 330.0 * e_pilkku_toiseen) * Math.pow(A, 6.0) / 720.0)) + N_nolla;
+        assertEquals(4484124.4 + N_nolla, y, 0.1);
+
+        double k = k_nolla * (1.0 + (1.0 + C) * Math.pow(A, 2.0) / 2.0 + (5.0 - 4.0 * T + 42.0 * C + 13.0 * Math.pow(C, 2.0) - 28.0 * e_pilkku_toiseen) * Math.pow(A, 4.0) / 24.0 +
+                (61.0 - 148.0 * T + 167.0 * Math.pow(T, 2.0)) * Math.pow(A, 6.0) / 720.0);
+        assertEquals(0.9997989, k, 0.0000001);
+    }
+
+    @Test
+    public void utmToDegrees() {
+
+        double x = 127106.5; // easting + false easting
+        double y = 4484124.4; // northing + false northing
+        String zone = "43T";
+
+        int falseEasting = Projektiokaavat.getUtmFalseEasting(zone);
+        assertEquals(-1, falseEasting);
+
+        int falseNorthing = Projektiokaavat.getUtmFalseNorthing(zone);
+        assertEquals(-1, falseNorthing);
+
+        int zone_num = Projektiokaavat.getUtmZoneNumber(zone);
+        assertEquals(43, zone_num);
+
+        // GRS80-vertausellipsoidin parametrit:
+
+        double a = 6378206.4; // Equatorial radius
+
+        // Karttaprojektion parametrit:
+
+        double k_nolla = 0.9996; // Central scale factor
+
+        double lambda_nolla = falseEasting * Math.toRadians((zone_num - 1.0) * 6.0 - 180.0 + 3.0); // Central meridian
+        assertEquals(-75, Math.toDegrees(lambda_nolla), 0.1);
+
+        double E_nolla = falseEasting == 1 ? 0.0 : 500000.0; // False easting
+        assertEquals(500000.0, E_nolla, 0.00000001);
+
+        double N_nolla = falseNorthing == 1 ? 10000000.0 : 0.0; // False northing
+        assertEquals(0.0, N_nolla, 0.00000001);
+
+        // Apusuureet:
+
+        double e_toiseen = 0.00676866; // Eccentricity squared
+
+        // UTM-koordinaateista geodeettisiksi koordinaateiksi
+
+        double fii_nolla = Math.toRadians(0); // Origin (UTM Zone)
+
+        double M_nolla = a * ((1.0 - e_toiseen / 4.0 - 3.0 * Math.pow(e_toiseen, 2.0) / 64.0 - 5.0 * Math.pow(e_toiseen, 3.0) / 256.0) * fii_nolla - (3.0 * e_toiseen / 8.0 + 3.0 * Math.pow(e_toiseen, 2.0) / 32.0 +
+                45.0 * Math.pow(e_toiseen, 3.0) / 1024.0) * Math.sin(2.0 * fii_nolla) + (15.0 * Math.pow(e_toiseen, 2.0) / 256.0 + 45.0 * Math.pow(e_toiseen, 3.0) / 1024.0) * Math.sin(4.0 * fii_nolla) -
+                (35.0 * Math.pow(e_toiseen, 3.0) / 3072.0) * Math.sin(6.0 * fii_nolla));
+        assertEquals(0.00, M_nolla, 0.01);
+
+        double e_pilkku_toiseen = e_toiseen / (1.0 - e_toiseen);
+        assertEquals(0.0068148, e_pilkku_toiseen, 0.0000001);
+
+        double M = M_nolla + y / k_nolla;
+        assertEquals(4485918.8, M, 0.1);
+
+        double e_yksi = (1.0 - Math.sqrt(1.0 - e_toiseen)) / (1.0 + Math.sqrt(1.0 - e_toiseen));
+        assertEquals(0.001697916, e_yksi, 0.000000001);
+
+        double myy = M / (a * (1.0 - e_toiseen / 4.0 - 3.0 * Math.pow(e_toiseen, 2.0) / 64.0 - 5.0 * Math.pow(e_toiseen, 3.0) / 256.0));
+        assertEquals(0.7045135, myy, 0.0000001);
+
+        double fii_yksi = myy + (3.0 * e_yksi / 2.0 - 27.0 * Math.pow(e_yksi, 3.0) / 32.0) *
+                Math.sin(2.0 * myy) + (21.0 * Math.pow(e_yksi, 2.0) / 16.0 - 55.0 * Math.pow(e_yksi, 4.0) / 32.0) *
+                Math.sin(4.0 * myy) + (151.0 * Math.pow(e_yksi, 3.0) / 96.0) * Math.sin(6.0 * myy);
+        assertEquals(0.7070283, fii_yksi, 0.0000001);
+        assertEquals(40.5097362, Math.toDegrees(fii_yksi), 0.000001);
+
+        double C_yksi = e_pilkku_toiseen * Math.pow(Math.cos(fii_yksi), 2.0);
+        assertEquals(0.0039393, C_yksi, 0.0000001);
+
+        double T_yksi = Math.pow(Math.tan(fii_yksi), 2.0);
+        assertEquals(0.7299560, T_yksi, 0.0000001);
+
+        double N_yksi = a / Math.sqrt(1.0 - e_toiseen * Math.pow(Math.sin(fii_yksi), 2.0));
+        assertEquals(6387334.2, N_yksi, 0.1);
+
+        double R_yksi = a * (1.0 - e_toiseen) / Math.pow((1.0 - e_toiseen * Math.pow(Math.sin(fii_yksi), 2.0)), 3.0 / 2.0);
+        assertEquals(6362271.4, R_yksi, 0.1);
+
+        double D = x / (N_yksi * k_nolla);
+        assertEquals(0.0199077, D, 0.0000001);
+
+        double fii = fii_yksi - (N_yksi * Math.tan(fii_yksi) / R_yksi) * (Math.pow(D, 2.0) / 2.0 - (5.0 + 3.0 * T_yksi + 10.0 * C_yksi - 4.0 * Math.pow(C_yksi, 2.0) - 9.0 * e_pilkku_toiseen) * Math.pow(D, 4.0) / 24.0 +
+                (61.0 + 90.0 * T_yksi + 298.0 * C_yksi + 45.0 * Math.pow(T_yksi, 2.0) - 252.0 * e_pilkku_toiseen - 3.0 * Math.pow(C_yksi, 2.0)) * Math.pow(D, 6.0) / 720.0);
+
+        double lambda = lambda_nolla + (D - (1.0 + 2.0 * T_yksi + C_yksi) * Math.pow(D, 3.0) / 6.0 + (5.0 - 2.0 * C_yksi + 28.0 * T_yksi -
+                3.0 * Math.pow(C_yksi, 2.0) + 8.0 * e_pilkku_toiseen + 24.0 * Math.pow(T_yksi, 2.0)) * Math.pow(D, 5.0) / 120.0) / Math.cos(fii_yksi);
+
+        double latitude = Math.toDegrees(fii);
+        assertEquals(40.500000, latitude, 0.000001);
+
+        double longitude = Math.toDegrees(lambda);
+        assertEquals(-73.5, longitude, 0.000001);
+
+        double[] dms_lat = Koordinaatit.degreesToDms(latitude);
+        assertEquals(40, dms_lat[0], 0.5);
+        assertEquals(30, dms_lat[1], 0.5);
+
+        double[] dms_lon = Koordinaatit.degreesToDms(longitude);
+        assertEquals(-73, dms_lon[0], 0.5);
+        assertEquals(-30, dms_lon[1], 0.5);
+    }
+
+    @Test
     public void degreesToUtmTest_1() {
         double latitude = 51.0;
         double longitude = 10.0;
 
-        double utmNorthing = Projektiokaavat.CalculateUTMNorthing(latitude, longitude);
-        double utmEasting = Projektiokaavat.CalculateUTMEasting(latitude, longitude);
-        String utmZone = Projektiokaavat.CalculateUTMZone(latitude, longitude);
+        String zone = Projektiokaavat.getUtmZone(latitude, longitude);
+        assertEquals("32U", zone);
 
-        assertEquals(5650300.787, utmNorthing,0.001);
-        assertEquals(570168.862, utmEasting,0.001);
-        assertEquals("32U", utmZone);
+        double[] utm = Projektiokaavat.degreesToUtm(latitude, longitude);
+        assertEquals(5650300.787, utm[1], 0.001);
+        assertEquals(570168.862, utm[0], 0.001);
+
+        double x = utm[0];
+        double y = utm[1];
+
+        double[] degrees = Projektiokaavat.utmToDegrees(x, y, zone);
+        assertEquals(latitude, degrees[0], 0.001);
+        assertEquals(longitude, degrees[1], 0.001);
+
+        int falseEasting = Projektiokaavat.getUtmFalseEasting(zone);
+        int falseNorthing = Projektiokaavat.getUtmFalseNorthing(zone);
+
+        assertEquals(-1, falseEasting);
+        assertEquals(-1, falseNorthing);
     }
 
     @Test
     public void degreesToUtmTest_2() {
-        double latitude = 69.508514;
-        double longitude = 17.422789;
+        double latitude = 69.5085139587101; // 69.5085139587101
+        double longitude = 17.422788585861085; // 17.422788585861085
 
-        double utmNorthing = Projektiokaavat.CalculateUTMNorthing(latitude, longitude);
-        double utmEasting = Projektiokaavat.CalculateUTMEasting(latitude, longitude);
-        String utmZone = Projektiokaavat.CalculateUTMZone(latitude, longitude);
+        String zone = Projektiokaavat.getUtmZone(latitude, longitude);
+        assertEquals("33W", zone);
 
-        assertEquals(7712940.005, utmNorthing,0.002);
-        assertEquals(594634.016, utmEasting,0.001);
-        assertEquals("33W", utmZone);
+        double[] utm = Projektiokaavat.degreesToUtm(latitude, longitude);
+        assertEquals(7712940, utm[1], 0.001);
+        assertEquals(594634, utm[0], 0.001);
+
+        double x = utm[0];
+        double y = utm[1];
+
+        double[] degrees = Projektiokaavat.utmToDegrees(x, y, zone);
+        assertEquals(latitude, degrees[0], 0.001);
+        assertEquals(longitude, degrees[1], 0.001);
+
+        int falseEasting = Projektiokaavat.getUtmFalseEasting(zone);
+        int falseNorthing = Projektiokaavat.getUtmFalseNorthing(zone);
+
+        assertEquals(-1, falseEasting);
+        assertEquals(-1, falseNorthing);
     }
 
     @RunWith(Parameterized.class)

@@ -145,75 +145,131 @@ public class Projektiokaavat {
     }
 
     /**
-     * From WGS84 to UTM conversion.
+     * From WGS84 to UTM conversion according to Snyder, J.P., 1987. Map projections – A working manual.
+     * @param latitude north coordinate in degrees
+     * @param longitude east coordinate in degrees
+     * @return [x easting, y northing, k height]
      */
-    public static double CalculateUTMNorthing(double latitude, double longitude) {
+    public static double[] degreesToUtm(double latitude, double longitude) {
 
-        int utmZone = (int) Math.floor((longitude + 180.0) / 6.0) + 1;
+        String zone = Projektiokaavat.getUtmZone(latitude, longitude);
+        int zone_num = Projektiokaavat.getUtmZoneNumber(zone);
+        int falseEasting = Projektiokaavat.getUtmFalseEasting(zone);
+        int falseNorthing = Projektiokaavat.getUtmFalseNorthing(zone);
 
-        int hemisphere = latitude < 0 ? -1 : 1;
+        // GRS80-vertausellipsoidin parametrit:
 
-        double CentralMeridian = (utmZone - 1.0) * 6.0 - 180.0 + 3.0;
+        double a = 6378137; // Equatorial radius
+        double f = 1 / 298.257222101;
 
-        double ScaleFactor = 0.9996;
+        // Karttaprojektion parametrit:
 
-        double EquatorialRadius = 6378137;
+        double k_nolla = 0.9996; // Central scale factor
+        double lambda_nolla = Math.toRadians((zone_num - 1.0) * 6.0 - 180.0 + 3.0); // Central meridian
+        double E_nolla = falseEasting == 1 ? 0.0 : 500000.0; // False easting
+        double N_nolla = falseNorthing == 1 ? 10000000.0 : 0.0; // False northing
 
-        double EccentricitySquared = 0.00669438;
+        // Apusuureet:
 
-        double N = EquatorialRadius / Math.sqrt(1.0 - EccentricitySquared * Math.pow(Math.sin(latitude * 3.14159265358979 / 180.0), 2.0));
+        double e_toiseen = (2.0 * f) - Math.pow(f, 2); // Eccentricity squared
 
-        double T = Math.pow(Math.tan(latitude * 3.14159265358979 / 180.0), 2.0);
+        // Geodeettisista koordinaateista UTM-koordinaateiksi
 
-        double C = EccentricitySquared * Math.pow(Math.cos(latitude * 3.14159265358979 / 180.0), 2.0);
+        double fii = Math.toRadians(latitude);
+        double fii_nolla = Math.toRadians(0); // Origin (UTM Zone)
+        double lambda = Math.toRadians(longitude);
 
-        double A = Math.cos(latitude * 3.14159265358979 / 180.0) * (longitude - CentralMeridian) * 3.14159265358979 / 180.0;
+        double e_pilkku_toiseen = e_toiseen / (1.0 - e_toiseen);
+        double N = a / Math.sqrt(1.0 - e_toiseen * Math.pow(Math.sin(fii), 2.0));
+        double T = Math.pow(Math.tan(fii), 2.0);
+        double C = e_pilkku_toiseen * Math.pow(Math.cos(fii), 2.0);
+        double A = (lambda - lambda_nolla) * Math.cos(fii);
 
-        double M = EquatorialRadius * ((1.0 - EccentricitySquared / 4.0 - 3.0 * Math.pow(EccentricitySquared, 2.0) / 64.0 - 5.0 * Math.pow(EccentricitySquared, 3.0) / 256.0) * latitude * 3.14159265358979 / 180.0 - (3.0 * EccentricitySquared / 8.0 + 3.0 * Math.pow(EccentricitySquared, 2.0) / 32.0 + 45.0 * Math.pow(EccentricitySquared, 3.0) / 1024.0) * Math.sin(2.0 * latitude * 3.14159265358979 / 180.0) + (15.0 * Math.pow(EccentricitySquared, 2.0) / 256.0 + 45.0 * Math.pow(EccentricitySquared, 3.0) / 1024.0) * Math.sin(4.0 * latitude * 3.14159265358979 / 180.0) - (35.0 * Math.pow(EccentricitySquared, 3.0) / 3072.0) * Math.sin(6.0 * latitude * 3.14159265358979 / 180.0));
+        double M = a * ((1.0 - e_toiseen / 4.0 - 3.0 * Math.pow(e_toiseen, 2.0) / 64.0 - 5.0 * Math.pow(e_toiseen, 3.0) / 256.0) * fii - (3.0 * e_toiseen / 8.0 + 3.0 * Math.pow(e_toiseen, 2.0) / 32.0 +
+                45.0 * Math.pow(e_toiseen, 3.0) / 1024.0) * Math.sin(2.0 * fii) + (15.0 * Math.pow(e_toiseen, 2.0) / 256.0 + 45.0 * Math.pow(e_toiseen, 3.0) / 1024.0) * Math.sin(4.0 * fii) -
+                (35.0 * Math.pow(e_toiseen, 3.0) / 3072.0) * Math.sin(6.0 * fii));
+        double M_nolla = a * ((1.0 - e_toiseen / 4.0 - 3.0 * Math.pow(e_toiseen, 2.0) / 64.0 - 5.0 * Math.pow(e_toiseen, 3.0) / 256.0) * fii_nolla - (3.0 * e_toiseen / 8.0 + 3.0 * Math.pow(e_toiseen, 2.0) / 32.0 +
+                45.0 * Math.pow(e_toiseen, 3.0) / 1024.0) * Math.sin(2.0 * fii_nolla) + (15.0 * Math.pow(e_toiseen, 2.0) / 256.0 + 45.0 * Math.pow(e_toiseen, 3.0) / 1024.0) * Math.sin(4.0 * fii_nolla) -
+                (35.0 * Math.pow(e_toiseen, 3.0) / 3072.0) * Math.sin(6.0 * fii_nolla));
 
-        double UTMScaleFactor = 0.9996;
+        double x = k_nolla * N * (A + (1.0 - T + C) * Math.pow(A, 3.0) / 6.0 + (5.0 - 18.0 * T + Math.pow(T, 2.0) + 72.0 * C - 58.0 * e_pilkku_toiseen) * Math.pow(A, 5.0) / 120.0) + E_nolla;
+        double y = k_nolla * (M - M_nolla + N * Math.tan(fii) * (Math.pow(A, 2.0) / 2.0 + (5.0 - T + 9.0 * C + 4.0 * Math.pow(C, 2.0)) * Math.pow(A, 4.0) / 24.0 +
+                (61.0 - 58.0 * T + Math.pow(T, 2.0) + 600.0 * C - 330.0 * e_pilkku_toiseen) * Math.pow(A, 6.0) / 720.0)) + N_nolla;
+        double k = k_nolla * (1.0 + (1.0 + C) * Math.pow(A, 2.0) / 2.0 + (5.0 - 4.0 * T + 42.0 * C + 13.0 * Math.pow(C, 2.0) - 28.0 * e_pilkku_toiseen) * Math.pow(A, 4.0) / 24.0 +
+                (61.0 - 148.0 * T + 167.0 * Math.pow(T, 2.0)) * Math.pow(A, 6.0) / 720.0);
 
-        double UTMFalseNorthing = hemisphere == 1 ? 0.0 : 10000000.0;
-
-        double UTMNorthing = UTMScaleFactor * (M + N * Math.tan(latitude * 3.14159265358979 / 180.0) * (Math.pow(A, 2.0) / 2.0 + (5.0 - T + 9.0 * C + 4.0 * Math.pow(C, 2.0)) * Math.pow(A, 4.0) / 24.0 + (61.0 - 58.0 * T + Math.pow(T, 2.0) + 600.0 * C - 330.0 * EccentricitySquared) * Math.pow(A, 6.0) / 720.0)) + UTMFalseNorthing;
-
-        return UTMNorthing;
+        return new double[] { x, y, k };
     }
 
     /**
-     * From WGS84 to UTM conversion.
+     * From UTM to WGS84 conversion according to Snyder, J.P., 1987. Map projections – A working manual.
+     * @param x easting in meters
+     * @param y northing in meters
+     * @return [latitude, longitude]
      */
-    public static double CalculateUTMEasting(double latitude, double longitude) {
+    public static double[] utmToDegrees(double x, double y, String zone) {
 
-        int utmZone = (int) Math.floor((longitude + 180.0) / 6.0) + 1;
+        int falseEasting = Projektiokaavat.getUtmFalseEasting(zone);
+        int falseNorthing = Projektiokaavat.getUtmFalseNorthing(zone);
+        int zone_num = Projektiokaavat.getUtmZoneNumber(zone);
 
-        double CentralMeridian = (utmZone - 1.0) * 6.0 - 180.0 + 3.0;
+        // GRS80-vertausellipsoidin parametrit:
 
-        double ScaleFactor = 0.9996;
+        double a = 6378137; // Equatorial radius
+        double f = 1 / 298.257222101;
 
-        double EquatorialRadius = 6378137;
+        // Karttaprojektion parametrit:
 
-        double EccentricitySquared = 0.00669438;
+        double k_nolla = 0.9996; // Central scale factor
+        double lambda_nolla = Math.toRadians((zone_num - 1.0) * 6.0 - 180.0 + 3.0); // Central meridian
+        double E_nolla = falseEasting == 1 ? 0.0 : 500000.0; // False easting
+        double N_nolla = falseNorthing == 1 ? 10000000.0 : 0; // False northing
 
-        double N = EquatorialRadius / Math.sqrt(1.0 - EccentricitySquared * Math.pow(Math.sin(latitude * 3.14159265358979 / 180.0), 2.0));
+        // Apusuureet:
 
-        double T = Math.pow(Math.tan(latitude * 3.14159265358979 / 180.0), 2.0);
+        double e_toiseen = (2.0 * f) - Math.pow(f, 2); // Eccentricity squared
 
-        double C = EccentricitySquared * Math.pow(Math.cos(latitude * 3.14159265358979 / 180.0), 2.0);
+        // UTM-koordinaateista geodeettisiksi koordinaateiksi
 
-        double A = Math.cos(latitude * 3.14159265358979 / 180.0) * (longitude - CentralMeridian) * 3.14159265358979 / 180.0;
+        // Subtract any "false easting" from x and "false northing" from y
+        // before inserting x and y into the inverse formulas.
+        x = x - E_nolla;
+        y = y - N_nolla;
 
-        double M = EquatorialRadius * ((1.0 - EccentricitySquared / 4.0 - 3.0 * Math.pow(EccentricitySquared, 2.0) / 64.0 - 5.0 * Math.pow(EccentricitySquared, 3.0) / 256.0) * latitude * 3.14159265358979 / 180.0 - (3.0 * EccentricitySquared / 8.0 + 3.0 * Math.pow(EccentricitySquared, 2.0) / 32.0 + 45.0 * Math.pow(EccentricitySquared, 3.0) / 1024.0) * Math.sin(2.0 * latitude * 3.14159265358979 / 180.0) + (15.0 * Math.pow(EccentricitySquared, 2.0) / 256.0 + 45.0 * Math.pow(EccentricitySquared, 3.0) / 1024.0) * Math.sin(4.0 * latitude * 3.14159265358979 / 180.0) - (35.0 * Math.pow(EccentricitySquared, 3.0) / 3072.0) * Math.sin(6.0 * latitude * 3.14159265358979 / 180.0));
+        double fii_nolla = Math.toRadians(0); // Origin (UTM Zone)
 
-        double UTMEasting = ScaleFactor * N * (A + (1.0 - T + C) * Math.pow(A, 3.0) / 6.0 + (5.0 - 18.0 * T + Math.pow(T, 2.0) + 72.0 * C - 58.0 * EccentricitySquared) * Math.pow(A, 5.0) / 120.0) + 500000.0;
+        double M_nolla = a * ((1.0 - e_toiseen / 4.0 - 3.0 * Math.pow(e_toiseen, 2.0) / 64.0 - 5.0 * Math.pow(e_toiseen, 3.0) / 256.0) * fii_nolla - (3.0 * e_toiseen / 8.0 + 3.0 * Math.pow(e_toiseen, 2.0) / 32.0 +
+                45.0 * Math.pow(e_toiseen, 3.0) / 1024.0) * Math.sin(2.0 * fii_nolla) + (15.0 * Math.pow(e_toiseen, 2.0) / 256.0 + 45.0 * Math.pow(e_toiseen, 3.0) / 1024.0) * Math.sin(4.0 * fii_nolla) -
+                (35.0 * Math.pow(e_toiseen, 3.0) / 3072.0) * Math.sin(6.0 * fii_nolla));
 
-        return UTMEasting;
+        double e_pilkku_toiseen = e_toiseen / (1.0 - e_toiseen);
+        double M = M_nolla + y / k_nolla;
+        double e_yksi = (1.0 - Math.sqrt(1.0 - e_toiseen)) / (1.0 + Math.sqrt(1.0 - e_toiseen));
+        double myy = M / (a * (1.0 - e_toiseen / 4.0 - 3.0 * Math.pow(e_toiseen, 2.0) / 64.0 - 5.0 * Math.pow(e_toiseen, 3.0) / 256.0));
+
+        double fii_yksi = myy + (3.0 * e_yksi / 2.0 - 27.0 * Math.pow(e_yksi, 3.0) / 32.0) *
+                Math.sin(2.0 * myy) + (21.0 * Math.pow(e_yksi, 2.0) / 16.0 - 55.0 * Math.pow(e_yksi, 4.0) / 32.0) *
+                Math.sin(4.0 * myy) + (151.0 * Math.pow(e_yksi, 3.0) / 96.0) * Math.sin(6.0 * myy);
+
+        double C_yksi = e_pilkku_toiseen * Math.pow(Math.cos(fii_yksi), 2.0);
+        double T_yksi = Math.pow(Math.tan(fii_yksi), 2.0);
+        double N_yksi = a / Math.sqrt(1.0 - e_toiseen * Math.pow(Math.sin(fii_yksi), 2.0));
+        double R_yksi = a * (1.0 - e_toiseen) / Math.pow((1.0 - e_toiseen * Math.pow(Math.sin(fii_yksi), 2.0)), 3.0 / 2.0);
+        double D = x / (N_yksi * k_nolla);
+
+        double fii = fii_yksi - (N_yksi * Math.tan(fii_yksi) / R_yksi) * (Math.pow(D, 2.0) / 2.0 - (5.0 + 3.0 * T_yksi + 10.0 * C_yksi - 4.0 * Math.pow(C_yksi, 2.0) - 9.0 * e_pilkku_toiseen) * Math.pow(D, 4.0) / 24.0 +
+                (61.0 + 90.0 * T_yksi + 298.0 * C_yksi + 45.0 * Math.pow(T_yksi, 2.0) - 252.0 * e_pilkku_toiseen - 3.0 * Math.pow(C_yksi, 2.0)) * Math.pow(D, 6.0) / 720.0);
+
+        double lambda = lambda_nolla + (D - (1.0 + 2.0 * T_yksi + C_yksi) * Math.pow(D, 3.0) / 6.0 + (5.0 - 2.0 * C_yksi + 28.0 * T_yksi -
+                3.0 * Math.pow(C_yksi, 2.0) + 8.0 * e_pilkku_toiseen + 24.0 * Math.pow(T_yksi, 2.0)) * Math.pow(D, 5.0) / 120.0) / Math.cos(fii_yksi);
+
+        double latitude = Math.toDegrees(fii);
+        double longitude = Math.toDegrees(lambda);
+
+        return  new double[] { latitude, longitude };
     }
 
-    /**
-     * From WGS84 to UTM conversion.
-     */
-    public static String CalculateUTMZone(double latitude, double longitude) {
+    public static String getUtmZone(double latitude, double longitude) {
 
         int utmZone = (int) Math.floor((longitude + 180.0) / 6.0) + 1;
 
@@ -266,5 +322,43 @@ public class Projektiokaavat {
         }
 
         return utmZone + LatitudeBand;
+    }
+
+    public static int getUtmZoneNumber(String zone) {
+        return Integer.parseInt(zone.substring(0, zone.length() - 1));
+    }
+
+    public static  int getUtmFalseEasting(String zone) {
+        int num = Integer.parseInt(zone.substring(0, zone.length() - 1));
+        return num < 31 ? 1 : -1;
+    }
+
+    public static int getUtmFalseNorthing(String zone) {
+        switch (zone.charAt(zone.length() - 1)) {
+            case 'N':
+            case 'P':
+            case 'Q':
+            case 'R':
+            case 'S':
+            case 'T':
+            case 'U':
+            case 'V':
+            case 'W':
+            case 'X':
+                return -1;
+            case 'M':
+            case 'L':
+            case 'K':
+            case 'J':
+            case 'H':
+            case 'G':
+            case 'F':
+            case 'E':
+            case 'D':
+            case 'C':
+                return 1;
+            default:
+                return 0;
+        }
     }
 }

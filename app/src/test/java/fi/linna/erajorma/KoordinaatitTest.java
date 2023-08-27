@@ -100,4 +100,19 @@ public class KoordinaatitTest {
         assertEquals(7, Math.floor(dms[1]), EPSILON);
         assertEquals(11, Math.round(dms[2]), EPSILON);
     }
+
+    @Test
+    public void degreesToDirectionNorthTest() {
+        double lat1 = Koordinaatit.dmsToDegrees(50, 3, 59);
+        double lat2 = Koordinaatit.dmsToDegrees(58, 38, 38);
+        double lon = Koordinaatit.dmsToDegrees(-5, -42, -53);
+
+        double direction = Koordinaatit.degreesToDirection(lat1, lon, lat2, lon);
+        double[] dms = Koordinaatit.degreesToDms(direction);
+
+        assertEquals(0, Math.floor(direction), EPSILON);
+        assertEquals(0, Math.floor(dms[0]), EPSILON);
+        assertEquals(0, Math.floor(dms[1]), EPSILON);
+        assertEquals(0, Math.round(dms[2]), EPSILON);
+    }
 }

@@ -3,7 +3,6 @@ package fi.linna.erajorma.view;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
@@ -14,15 +13,21 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Base64;
 
-public class FragmentSerializer {
+import fi.linna.erajorma.model.Information;
+
+public final class FragmentSerializer {
+
+    private FragmentSerializer() {
+        // Prevents instantiation.
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static <T> T Deserialize(Fragment fragment, String key) throws RuntimeException {
+    public static Information Deserialize(Fragment fragment, String key) throws RuntimeException {
         if (fragment.getArguments() != null) {
             String serializedObject = fragment.getArguments().getString(key);
             byte[] decodedObject = Base64.getDecoder().decode(serializedObject);
             try (ObjectInputStream stream = new ObjectInputStream(new ByteArrayInputStream(decodedObject))) {
-                return (T) stream.readObject();
+                return (Information) stream.readObject();
             } catch (ClassNotFoundException | IOException e) {
                 throw new RuntimeException(e);
             }
@@ -31,7 +36,7 @@ public class FragmentSerializer {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static <T> void Serialize(Fragment fragment, String key, T value) throws RuntimeException {
+    public static void Serialize(Fragment fragment, String key, Information value) throws RuntimeException {
         Bundle args = new Bundle();
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {

@@ -14,7 +14,7 @@ public class Koordinaatit {
 
     /**
      * Convert degrees decimal part to minutes.
-     * @param degrees
+     * @param degrees degrees
      * @return minutes
      */
     private static double minutesToSeconds(double degrees) {
@@ -29,11 +29,9 @@ public class Koordinaatit {
     public static double dmsToDegrees(double... dms) {
         if (dms.length == 3) {
             final double mmm = dms[1] + dms[2] / 60;
-            final double ddd = dms[0] + mmm / 60;
-            return ddd;
+            return dms[0] + mmm / 60;
         } else if (dms.length == 2){
-            final double ddd = dms[0] + dms[1] / 60;
-            return ddd;
+            return dms[0] + dms[1] / 60;
         } else if (dms.length == 1) {
             return dms[0];
         } else {

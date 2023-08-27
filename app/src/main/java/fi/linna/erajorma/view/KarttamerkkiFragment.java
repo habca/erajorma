@@ -44,7 +44,7 @@ public class KarttamerkkiFragment extends Fragment {
         LinearLayout layout = view.findViewById(R.id.karttamerkki_fragment_list);
 
         for (String[] info : information.information) {
-            String text = String.format("%s: %s", info);
+            String text = String.format("%s: %s", info[0], info[1]);
 
             TextView row = new TextView(view.getContext());
             row.setText(text);

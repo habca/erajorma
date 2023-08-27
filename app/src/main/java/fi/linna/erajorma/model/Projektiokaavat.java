@@ -66,7 +66,7 @@ public class Projektiokaavat {
     /**
      * From ETRS-TM35FIN to WGS84 conversion according to the JHS 197 EUREF-FIN.
      */
-    public static double[] metersToDegrees(double north, double east) {
+    public static double[] metersToDegrees(double N, double E) {
 
         // GRS80-vertausellipsoidin parametrit:
 
@@ -91,9 +91,6 @@ public class Projektiokaavat {
         double h4 = 4397.0 / 161280.0 * Math.pow(n, 4.0);
 
         // Tasokoordinaateista geodeettisiksi koordinaateiksi
-
-        double N = north;
-        double E = east;
 
         double zeeta = N / (A1 * k_nolla);
         double eeta = (E - E_nolla) / (A1 * k_nolla);

@@ -15,6 +15,7 @@ import org.junit.runners.Parameterized;
 
 import fi.linna.erajorma.data.Karhunkierros;
 import fi.linna.erajorma.data.Lemmenjoki;
+import fi.linna.erajorma.data.PallasHettaOlos;
 import fi.linna.erajorma.data.PyhaLuosto;
 import fi.linna.erajorma.model.IKarttamerkki;
 import fi.linna.erajorma.model.Karttamerkki;
@@ -35,9 +36,12 @@ public class KarttamerkkiTest {
         @Parameterized.Parameters
         public static Collection<IKarttamerkki> data() {
             Collection<IKarttamerkki> data = new ArrayList<>();
-            data.addAll(new Lemmenjoki());
+
             data.addAll(new Karhunkierros());
+            data.addAll(new Lemmenjoki());
+            data.addAll(new PallasHettaOlos());
             data.addAll(new PyhaLuosto());
+
             return data;
         }
 

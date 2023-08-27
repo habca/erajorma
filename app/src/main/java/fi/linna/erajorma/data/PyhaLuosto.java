@@ -7,6 +7,7 @@ import fi.linna.erajorma.model.IKarttamerkki;
 import fi.linna.erajorma.model.Karttamerkki;
 
 public class PyhaLuosto extends ArrayList<IKarttamerkki> {
+
     /**
      * Pyhä Luoston tupien koordinaatit.
      */

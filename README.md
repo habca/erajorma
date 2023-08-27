@@ -23,6 +23,7 @@ Tarkka sijainti vaaditaan, muuten sovellus ei käynnisty.
 ## Suomen maastokartat
 
 - Pyhä Luosto, 1:25 000. Karttakeskus 2020. ISBN 978-952-266-512-6.
+- Pallas Hetta Olos, 1:50 000. Karttakeskus 2019. ISBN 978-952-266-627-7.
 - Saariselkä Sokosti, 1:50 000. Karttakeskus 2019. ISBN 978-952-266-583-6.
 - Karhunkierros, 1:25 000. Calazo 2019. ISBN 978-91-86773-48-9.
 - Lemmenjoki, 1:100 000/1:25 000. Calazo 2017. ISBN 978-91-88335-71-5.

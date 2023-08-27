@@ -21,6 +21,7 @@ import java.util.List;
 import fi.linna.erajorma.R;
 import fi.linna.erajorma.data.Karhunkierros;
 import fi.linna.erajorma.data.Lemmenjoki;
+import fi.linna.erajorma.data.PallasHettaOlos;
 import fi.linna.erajorma.data.PyhaLuosto;
 import fi.linna.erajorma.model.IKarttamerkki;
 import fi.linna.erajorma.model.Karttamerkki;
@@ -45,6 +46,7 @@ public class MapFragment extends Fragment {
         maastokartat.add(Karhunkierros.class.getCanonicalName());
         maastokartat.add(Lemmenjoki.class.getCanonicalName());
         maastokartat.add(PyhaLuosto.class.getCanonicalName());
+        maastokartat.add(PallasHettaOlos.class.getCanonicalName());
         maastokartat.sort(Karttamerkki.comparator());
 
         Spinner menu = root.findViewById(R.id.maastokartat);
@@ -71,9 +73,14 @@ public class MapFragment extends Fragment {
 
         if (Karhunkierros.class.getCanonicalName().equals(maastokartta)) {
             karttamerkit.addAll(new Karhunkierros());
-        } else if (Lemmenjoki.class.getCanonicalName().equals(maastokartta)) {
+        }
+        if (Lemmenjoki.class.getCanonicalName().equals(maastokartta)) {
             karttamerkit.addAll(new Lemmenjoki());
-        } else if (PyhaLuosto.class.getCanonicalName().equals(maastokartta)) {
+        }
+        if (PallasHettaOlos.class.getCanonicalName().equals(maastokartta)) {
+            karttamerkit.addAll(new PallasHettaOlos());
+        }
+        if (PyhaLuosto.class.getCanonicalName().equals(maastokartta)) {
             karttamerkit.addAll(new PyhaLuosto());
         }
 

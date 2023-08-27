@@ -3,9 +3,10 @@ package fi.linna.erajorma.data;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import fi.linna.erajorma.model.IKarttamerkki;
 import fi.linna.erajorma.model.Karttamerkki;
 
-public class Lemmenjoki extends ArrayList<Karttamerkki> {
+public class Lemmenjoki extends ArrayList<IKarttamerkki> {
 
     /**
      * Lemmenjoen tupien koordinaatit.

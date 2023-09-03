@@ -57,6 +57,14 @@ ln -s /var/lib/snapd/snap /snap
 snap install android-studio --classic
 ```
 
+### Terminal
+
+Run automated tests from linux terminal or build pipeline.
+
+```
+./gradlew test
+```
+
 ## References
 
 - [1] <https://wiki.archlinux.org/title/Snap#Classic_snaps>

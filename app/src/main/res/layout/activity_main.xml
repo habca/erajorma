@@ -7,7 +7,7 @@
     tools:context=".view.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/karttamerkki_fragment_container_view"
+        android:id="@+id/fragment_container_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
@@ -16,9 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="5dp"
-        android:layout_marginBottom="5dp"
-        android:name="fi.linna.erajorma.view.GpsFragment"
-        tools:layout="@layout/fragment_gps">
+        android:layout_marginBottom="5dp">
     </androidx.fragment.app.FragmentContainerView>
     
     <com.google.android.material.bottomnavigation.BottomNavigationView

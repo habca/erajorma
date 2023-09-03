@@ -31,6 +31,8 @@ import fi.linna.erajorma.model.Koordinaatit;
 
 public class GpsFragment extends Fragment {
 
+    private Fragment fragment;
+
     @Override
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class GpsFragment extends Fragment {
     @Override
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        CreateKarttamerkkiFragment(fragment);
         CreateButton(view);
     }
 
@@ -47,7 +50,6 @@ public class GpsFragment extends Fragment {
     private void CreateButton(@NonNull View root) {
         Button button = root.findViewById(R.id.navigaattori);
         button.setOnClickListener(view -> getLocation(root));
-        button.setText("GPS");
     }
 
     private void checkLocationAccess(@NonNull View root) throws IllegalAccessException {
@@ -115,9 +117,16 @@ public class GpsFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void CreateKarttamerkkiFragment(Information information) {
         KarttamerkkiFragment fragment = KarttamerkkiFragment.newInstance(information);
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.karttamerkki_fragment_container_view, fragment)
-                .commit();
+        CreateKarttamerkkiFragment(fragment);
+    }
+
+    private void CreateKarttamerkkiFragment(Fragment fragment) {
+        if (fragment != null) {
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.karttamerkki_fragment_container_view, fragment)
+                    .commit();
+            this.fragment = fragment;
+        }
     }
 }

@@ -16,7 +16,7 @@
         android:theme="@style/Theme.Erajorma"
         tools:targetApi="31">
         <activity
-            android:name=".view.ActivityMarker"
+            android:name=".view.MarkerActivity"
             android:exported="false" />
         <activity
             android:name=".view.MainActivity"

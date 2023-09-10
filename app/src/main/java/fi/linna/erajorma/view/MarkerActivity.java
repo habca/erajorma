@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import fi.linna.erajorma.R;
 import fi.linna.erajorma.model.Information;
 
-public class ActivityMarker extends AppCompatActivity {
+public class MarkerActivity extends AppCompatActivity {
 
     @Override
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -25,7 +25,7 @@ public class ActivityMarker extends AppCompatActivity {
         String value = intent.getStringExtra("key");
         Information information = FragmentSerializer.Deserialize(value);
 
-        KarttamerkkiFragment fragment = KarttamerkkiFragment.newInstance(information);
+        MarkerFragment fragment = MarkerFragment.newInstance(information);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container_view_marker, fragment)

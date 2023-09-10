@@ -116,7 +116,7 @@ public class GpsFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void CreateKarttamerkkiFragment(Information information) {
-        KarttamerkkiFragment fragment = KarttamerkkiFragment.newInstance(information);
+        MarkerFragment fragment = MarkerFragment.newInstance(information);
         CreateKarttamerkkiFragment(fragment);
     }
 

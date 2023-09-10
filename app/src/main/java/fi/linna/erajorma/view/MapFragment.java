@@ -104,7 +104,7 @@ public class MapFragment extends Fragment {
                 Information information = karttamerkki.getInformation();
                 String serializedObject = FragmentSerializer.Serialize(information);
 
-                Intent myIntent = new Intent(getActivity(), ActivityMarker.class);
+                Intent myIntent = new Intent(getActivity(), MarkerActivity.class);
                 myIntent.putExtra("key", serializedObject);
                 getActivity().startActivity(myIntent);
             }
@@ -113,7 +113,7 @@ public class MapFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void CreateKarttamerkkiFragment(Information information) {
-        KarttamerkkiFragment fragment = KarttamerkkiFragment.newInstance(information);
+        MarkerFragment fragment = MarkerFragment.newInstance(information);
         CreateKarttamerkkiFragment(fragment);
     }
 

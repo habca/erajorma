@@ -15,15 +15,15 @@ import android.widget.TextView;
 import fi.linna.erajorma.R;
 import fi.linna.erajorma.model.Information;
 
-public class KarttamerkkiFragment extends Fragment {
+public class MarkerFragment extends Fragment {
 
     private static final String ARG_KARTTAMERKKI = Information.class.getName();
 
     private Information information;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static KarttamerkkiFragment newInstance(Information information) {
-        KarttamerkkiFragment fragment = new KarttamerkkiFragment();
+    public static MarkerFragment newInstance(Information information) {
+        MarkerFragment fragment = new MarkerFragment();
         FragmentSerializer.Serialize(fragment, ARG_KARTTAMERKKI, information);
         return fragment;
     }
@@ -37,7 +37,7 @@ public class KarttamerkkiFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return Initialize(inflater.inflate(R.layout.fragment_karttamerkki, container, false));
+        return Initialize(inflater.inflate(R.layout.fragment_marker, container, false));
     }
 
     private View Initialize(View view) {

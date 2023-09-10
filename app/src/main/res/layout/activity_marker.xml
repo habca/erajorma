@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.ActivityMarker">
+    tools:context=".view.MarkerActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_view_marker"

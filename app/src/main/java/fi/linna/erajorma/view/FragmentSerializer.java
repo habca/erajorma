@@ -36,6 +36,16 @@ public final class FragmentSerializer {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    public static Information Deserialize(String serializedObject) throws RuntimeException {
+        byte[] decodedObject = Base64.getDecoder().decode(serializedObject);
+        try (ObjectInputStream stream = new ObjectInputStream(new ByteArrayInputStream(decodedObject))) {
+            return (Information) stream.readObject();
+        } catch (ClassNotFoundException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static void Serialize(Fragment fragment, String key, Information value) throws RuntimeException {
         Bundle args = new Bundle();
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -47,5 +57,18 @@ public final class FragmentSerializer {
             throw new RuntimeException(e);
         }
         fragment.setArguments(args);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String Serialize(Information value) throws RuntimeException {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
+
+            objectOutputStream.writeObject(value);
+            String encodedObject = Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
+            return encodedObject;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package fi.linna.erajorma.view;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import fi.linna.erajorma.data.Lemmenjoki;
 import fi.linna.erajorma.data.PallasHettaOlos;
 import fi.linna.erajorma.data.PyhaLuosto;
 import fi.linna.erajorma.model.IKarttamerkki;
+import fi.linna.erajorma.model.Information;
 import fi.linna.erajorma.model.Karttamerkki;
 
 public class MapFragment extends Fragment {
@@ -93,5 +95,34 @@ public class MapFragment extends Fragment {
         ListView karttamerkitView = root.findViewById(R.id.karttamerkit);
         karttamerkitView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        karttamerkitView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                IKarttamerkki karttamerkki = karttamerkit.get(i);
+                Information information = karttamerkki.getInformation();
+                String serializedObject = FragmentSerializer.Serialize(information);
+
+                Intent myIntent = new Intent(getActivity(), ActivityMarker.class);
+                myIntent.putExtra("key", serializedObject);
+                getActivity().startActivity(myIntent);
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void CreateKarttamerkkiFragment(Information information) {
+        KarttamerkkiFragment fragment = KarttamerkkiFragment.newInstance(information);
+        CreateKarttamerkkiFragment(fragment);
+    }
+
+    private void CreateKarttamerkkiFragment(Fragment fragment) {
+        if (fragment != null) {
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.karttamerkki_fragment_container_view, fragment)
+                    .commit();
+        }
     }
 }

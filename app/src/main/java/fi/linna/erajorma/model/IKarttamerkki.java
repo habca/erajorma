@@ -2,7 +2,7 @@ package fi.linna.erajorma.model;
 
 import java.io.Serializable;
 
-public interface IKarttamerkki extends IInformation, Serializable, Comparable<IKarttamerkki> {
+public interface IKarttamerkki extends Serializable, Comparable<IKarttamerkki> {
 
     String getName();
 

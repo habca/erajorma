@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import fi.linna.erajorma.R;
-import fi.linna.erajorma.model.Information;
+import fi.linna.erajorma.model.IKarttamerkki;
 
 public class MarkerActivity extends AppCompatActivity {
 
@@ -22,10 +22,10 @@ public class MarkerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        String value = intent.getStringExtra("key");
-        Information information = FragmentSerializer.Deserialize(value);
+        String value = intent.getStringExtra(MarkerFragment.ARG_MARKER);
+        IKarttamerkki marker = FragmentSerializer.Deserialize(value);
 
-        MarkerFragment fragment = MarkerFragment.newInstance(information);
+        MarkerFragment fragment = MarkerFragment.newInstance(marker);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container_view_marker, fragment)

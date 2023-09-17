@@ -3,7 +3,7 @@ package fi.linna.erajorma.model;
 import java.io.Serializable;
 import java.util.Comparator;
 
-public class Karttamerkki implements IKarttamerkki, IInformation, Serializable {
+public class Karttamerkki implements IKarttamerkki, Serializable {
     public String name;
     public double[] lat;
     public double[] lon;
@@ -77,16 +77,5 @@ public class Karttamerkki implements IKarttamerkki, IInformation, Serializable {
             }
             return ys.length - xs.length;
         };
-    }
-
-    @Override
-    public Information getInformation() {
-        return new Information(new String[][] {
-                new String[] { "Name", getName() },
-                new String[] { "lat", String.format("%.0f\u00B0 %.4f\u2032 (~WGS84)", lat[0], lat[1]) },
-                new String[] { "lon", String.format("%.0f\u00B0 %.4f\u2032 (~WGS84)", lon[0], lon[1]) },
-                new String[] { "N", String.format("%.0f (ETRS-TM35FIN)", getNorth()) },
-                new String[] { "E", String.format("%.0f (ETRS-TM35FIN)", getEast()) },
-        });
     }
 }

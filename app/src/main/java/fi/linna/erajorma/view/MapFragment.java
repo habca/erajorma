@@ -25,7 +25,6 @@ import fi.linna.erajorma.data.Lemmenjoki;
 import fi.linna.erajorma.data.PallasHettaOlos;
 import fi.linna.erajorma.data.PyhaLuosto;
 import fi.linna.erajorma.model.IKarttamerkki;
-import fi.linna.erajorma.model.Information;
 import fi.linna.erajorma.model.Karttamerkki;
 
 public class MapFragment extends Fragment {
@@ -44,22 +43,22 @@ public class MapFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void CreateSpinner(@NonNull View root) {
-        List<String> maastokartat = new ArrayList<>();
-        maastokartat.add(Karhunkierros.class.getCanonicalName());
-        maastokartat.add(Lemmenjoki.class.getCanonicalName());
-        maastokartat.add(PyhaLuosto.class.getCanonicalName());
-        maastokartat.add(PallasHettaOlos.class.getCanonicalName());
-        maastokartat.sort(Karttamerkki.comparator());
+        List<String> maps = new ArrayList<>();
+        maps.add(Karhunkierros.class.getCanonicalName());
+        maps.add(Lemmenjoki.class.getCanonicalName());
+        maps.add(PyhaLuosto.class.getCanonicalName());
+        maps.add(PallasHettaOlos.class.getCanonicalName());
+        maps.sort(Karttamerkki.comparator());
 
-        Spinner menu = root.findViewById(R.id.maastokartat);
+        Spinner menu = root.findViewById(R.id.maps_spinner);
         menu.setAdapter(new ArrayAdapter<>(
-                root.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, maastokartat
+                root.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, maps
         ));
 
         menu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                CreateListView(root, maastokartat.get(i));
+                CreateListView(root, maps.get(i));
             }
 
             @Override
@@ -71,57 +70,56 @@ public class MapFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void CreateListView(@NonNull View root, String maastokartta) {
-        List<IKarttamerkki> karttamerkit = new ArrayList<>();
+        List<IKarttamerkki> markers = new ArrayList<>();
 
         if (Karhunkierros.class.getCanonicalName().equals(maastokartta)) {
-            karttamerkit.addAll(new Karhunkierros());
+            markers.addAll(new Karhunkierros());
         }
         if (Lemmenjoki.class.getCanonicalName().equals(maastokartta)) {
-            karttamerkit.addAll(new Lemmenjoki());
+            markers.addAll(new Lemmenjoki());
         }
         if (PallasHettaOlos.class.getCanonicalName().equals(maastokartta)) {
-            karttamerkit.addAll(new PallasHettaOlos());
+            markers.addAll(new PallasHettaOlos());
         }
         if (PyhaLuosto.class.getCanonicalName().equals(maastokartta)) {
-            karttamerkit.addAll(new PyhaLuosto());
+            markers.addAll(new PyhaLuosto());
         }
 
-        karttamerkit.sort(Comparator.naturalOrder());
+        markers.sort(Comparator.naturalOrder());
 
         ArrayAdapter<IKarttamerkki> adapter = new ArrayAdapter<>(
-                root.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, karttamerkit
+                root.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, markers
         );
 
-        ListView karttamerkitView = root.findViewById(R.id.karttamerkit);
-        karttamerkitView.setAdapter(adapter);
+        ListView markersView = root.findViewById(R.id.markers_list_view);
+        markersView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        karttamerkitView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        markersView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             @RequiresApi(api = Build.VERSION_CODES.O)
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                IKarttamerkki karttamerkki = karttamerkit.get(i);
-                Information information = karttamerkki.getInformation();
-                String serializedObject = FragmentSerializer.Serialize(information);
+                IKarttamerkki marker = markers.get(i);
+                String serializedObject = FragmentSerializer.Serialize(marker);
 
                 Intent myIntent = new Intent(getActivity(), MarkerActivity.class);
-                myIntent.putExtra("key", serializedObject);
+                myIntent.putExtra(MarkerFragment.ARG_MARKER, serializedObject);
                 getActivity().startActivity(myIntent);
             }
         });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void CreateKarttamerkkiFragment(Information information) {
-        MarkerFragment fragment = MarkerFragment.newInstance(information);
-        CreateKarttamerkkiFragment(fragment);
+    private void CreateMarkerFragment(IKarttamerkki marker) {
+        MarkerFragment fragment = MarkerFragment.newInstance(marker);
+        CreateMarkerFragment(fragment);
     }
 
-    private void CreateKarttamerkkiFragment(Fragment fragment) {
+    private void CreateMarkerFragment(Fragment fragment) {
         if (fragment != null) {
             getChildFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.karttamerkki_fragment_container_view, fragment)
+                    .replace(R.id.marker_fragment_container_view, fragment)
                     .commit();
         }
     }

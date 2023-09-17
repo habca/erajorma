@@ -13,18 +13,27 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import fi.linna.erajorma.R;
-import fi.linna.erajorma.model.Information;
+import fi.linna.erajorma.model.IKarttamerkki;
 
 public class MarkerFragment extends Fragment {
 
-    private static final String ARG_KARTTAMERKKI = Information.class.getName();
+    public static final String ARG_MARKER = IKarttamerkki.class.getName();
 
-    private Information information;
+    private IKarttamerkki marker;
+
+    private MarkerFragment() {
+        // Prevent default constructor.
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static MarkerFragment newInstance(Information information) {
+    public static MarkerFragment newInstance(IKarttamerkki marker) {
         MarkerFragment fragment = new MarkerFragment();
-        FragmentSerializer.Serialize(fragment, ARG_KARTTAMERKKI, information);
+        Bundle args = new Bundle();
+
+        String serializedObject = FragmentSerializer.Serialize(marker);
+        args.putSerializable(ARG_MARKER, serializedObject);
+
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -32,7 +41,9 @@ public class MarkerFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        information = FragmentSerializer.Deserialize(this, ARG_KARTTAMERKKI);
+
+        String serializedObject = getArguments().getString(ARG_MARKER);
+        marker = FragmentSerializer.Deserialize(serializedObject);
     }
 
     @Override
@@ -41,15 +52,11 @@ public class MarkerFragment extends Fragment {
     }
 
     private View Initialize(View view) {
-        LinearLayout layout = view.findViewById(R.id.karttamerkki_fragment_list);
+        LinearLayout layout = view.findViewById(R.id.marker_fragment_list);
 
-        for (String[] info : information.information) {
-            String text = String.format("%s: %s", info[0], info[1]);
-
-            TextView row = new TextView(view.getContext());
-            row.setText(text);
-            layout.addView(row);
-        }
+        TextView row = new TextView(view.getContext());
+        row.setText(marker.toString());
+        layout.addView(row);
 
         return view;
     }

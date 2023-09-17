@@ -25,7 +25,6 @@ import java.util.Date;
 
 import fi.linna.erajorma.R;
 import fi.linna.erajorma.model.IKarttamerkki;
-import fi.linna.erajorma.model.Information;
 import fi.linna.erajorma.model.Karttamerkki;
 import fi.linna.erajorma.model.Koordinaatit;
 
@@ -42,7 +41,7 @@ public class GpsFragment extends Fragment {
     @Override
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        CreateKarttamerkkiFragment(fragment);
+        CreateMarkerFragment(fragment);
         CreateButton(view);
     }
 
@@ -98,10 +97,7 @@ public class GpsFragment extends Fragment {
                         double[] latDms = Koordinaatit.degreesToDms(latitude);
                         double[] lonDms = Koordinaatit.degreesToDms(longitude);
 
-                        IKarttamerkki result = new Karttamerkki("GPS", latDms, lonDms);
-
-                        Information information = result.getInformation();
-                        information.addInformation(new String[] { "Time", date.toString() });
+                        IKarttamerkki marker = new Karttamerkki("GPS", latDms, lonDms);
 
                         Button button = root.findViewById(R.id.navigaattori);
                         button.setEnabled(true);
@@ -109,22 +105,22 @@ public class GpsFragment extends Fragment {
                         TextView textView = root.findViewById(R.id.koordinaatit);
                         textView.setText("");
 
-                        CreateKarttamerkkiFragment(information);
+                        CreateMarkerFragment(marker);
                     }
                 });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void CreateKarttamerkkiFragment(Information information) {
-        MarkerFragment fragment = MarkerFragment.newInstance(information);
-        CreateKarttamerkkiFragment(fragment);
+    private void CreateMarkerFragment(IKarttamerkki marker) {
+        MarkerFragment fragment = MarkerFragment.newInstance(marker);
+        CreateMarkerFragment(fragment);
     }
 
-    private void CreateKarttamerkkiFragment(Fragment fragment) {
+    private void CreateMarkerFragment(Fragment fragment) {
         if (fragment != null) {
             getChildFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.karttamerkki_fragment_container_view, fragment)
+                    .replace(R.id.marker_fragment_container_view, fragment)
                     .commit();
             this.fragment = fragment;
         }

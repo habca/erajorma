@@ -26,6 +26,14 @@ public class MarkerView extends FrameLayout {
         SetEditTextContent(R.id.marker_wgs84_latitude, marker_wgs84_latitude);
         SetEditTextContent(R.id.marker_wgs84_longitude, marker_wgs84_longitude);
 
+        String marker_utm_zone = marker.getZone();
+        double marker_utm_north = marker.getNorthing();
+        double marker_utm_east = marker.getEasting();
+
+        SetEditTextContent(R.id.marker_utm_zone, marker_utm_zone);
+        SetEditTextContent(R.id.marker_utm_north, marker_utm_north);
+        SetEditTextContent(R.id.marker_utm_east, marker_utm_east);
+
         double marker_tm35fin_north = marker.getNorth();
         double marker_tm35fin_east = marker.getEast();
 
@@ -34,8 +42,12 @@ public class MarkerView extends FrameLayout {
     }
 
     private void SetEditTextContent(int layoutId, double value) {
-        EditText target = findViewById(layoutId);
         String format = String.format("%.4f", value);
-        target.setText(format);
+        SetEditTextContent(layoutId, format);
+    }
+
+    private void SetEditTextContent(int layoutId, String value) {
+        EditText target = findViewById(layoutId);
+        target.setText(value);
     }
 }

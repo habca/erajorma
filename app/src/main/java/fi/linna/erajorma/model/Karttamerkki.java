@@ -9,23 +9,29 @@ public class Karttamerkki implements IKarttamerkki, Serializable {
     public double[] lon;
     public double N;
     public double E;
+    public String UTM_zone;
+    public double UTM_N;
+    public double UTM_E;
 
     public Karttamerkki(String name, double[] lat, double[] lon) {
         double latitude = Koordinaatit.dmsToDegrees(lat);
         double longitude = Koordinaatit.dmsToDegrees(lon);
         double[] meters = Projektiokaavat.degreesToMeters(latitude, longitude);
+        double[] utm = Projektiokaavat.degreesToUtm(latitude, longitude);
+        String UTM_zone = Projektiokaavat.getUtmZone(latitude, longitude);
 
         this.name = name;
         this.lat = lat;
         this.lon = lon;
         this.N = meters[0];
         this.E = meters[1];
+        this.UTM_N = utm[0];
+        this.UTM_E = utm[1];
+        this.UTM_zone = UTM_zone;
     }
 
     public Karttamerkki(String name, double[] lat, double[] lon, double N, double E) {
-        this.name = name;
-        this.lat = lat;
-        this.lon = lon;
+        this(name, lat, lon);
         this.N = N;
         this.E = E;
     }
@@ -52,6 +58,21 @@ public class Karttamerkki implements IKarttamerkki, Serializable {
     @Override
     public double getEast() {
         return E;
+    }
+
+    @Override
+    public String getZone() {
+        return UTM_zone;
+    }
+
+    @Override
+    public double getNorthing() {
+        return UTM_N;
+    }
+
+    @Override
+    public double getEasting() {
+        return UTM_E;
     }
 
     @Override

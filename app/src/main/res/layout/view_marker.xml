@@ -51,6 +51,69 @@
             android:layout_width="match_parent"
             android:layout_height="15dp" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="UTM" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="115dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Zone" />
+            <EditText
+                android:id="@+id/marker_utm_zone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:enabled="false" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="115dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="North" />
+            <EditText
+                android:id="@+id/marker_utm_north"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:enabled="false" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="115dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="East" />
+            <EditText
+                android:id="@+id/marker_utm_east"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:enabled="false" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

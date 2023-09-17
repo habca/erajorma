@@ -19,11 +19,12 @@ public class MarkerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_marker);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         Intent intent = getIntent();
         String value = intent.getStringExtra(MarkerFragment.ARG_MARKER);
         IKarttamerkki marker = FragmentSerializer.Deserialize(value);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(marker.getName());
 
         MarkerFragment fragment = MarkerFragment.newInstance(marker);
         getSupportFragmentManager()

@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import fi.linna.erajorma.R;
 import fi.linna.erajorma.model.IKarttamerkki;
@@ -54,9 +53,8 @@ public class MarkerFragment extends Fragment {
     private View Initialize(View view) {
         LinearLayout layout = view.findViewById(R.id.marker_fragment_list);
 
-        TextView row = new TextView(view.getContext());
-        row.setText(marker.toString());
-        layout.addView(row);
+        View markerView = new MarkerView(view.getContext(), marker);
+        layout.addView(markerView);
 
         return view;
     }

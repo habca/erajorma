@@ -11,13 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.time.chrono.Era;
+
 import fi.linna.erajorma.R;
+import fi.linna.erajorma.model.Erajorma;
 import fi.linna.erajorma.model.IKarttamerkki;
 
 public class MarkerFragment extends Fragment {
 
     public static final String ARG_MARKER = IKarttamerkki.class.getName();
+    public static final String ARG_USER = Erajorma.class.getName();
 
+    private Erajorma erajorma;
     private IKarttamerkki marker;
 
     private MarkerFragment() {
@@ -25,14 +30,19 @@ public class MarkerFragment extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static MarkerFragment newInstance(IKarttamerkki marker) {
+    public static MarkerFragment newInstance(IKarttamerkki marker, Erajorma erajorma) {
         MarkerFragment fragment = new MarkerFragment();
         Bundle args = new Bundle();
 
         String serializedObject = FragmentSerializer.Serialize(marker);
         args.putSerializable(ARG_MARKER, serializedObject);
 
+        serializedObject = FragmentSerializer.Serialize(erajorma);
+        args.putSerializable(ARG_USER, serializedObject);
+
         fragment.setArguments(args);
+        fragment.erajorma = erajorma;
+
         return fragment;
     }
 
@@ -43,6 +53,9 @@ public class MarkerFragment extends Fragment {
 
         String serializedObject = getArguments().getString(ARG_MARKER);
         marker = FragmentSerializer.Deserialize(serializedObject);
+
+        serializedObject = getArguments().getString(ARG_USER);
+        erajorma = FragmentSerializer.Deserialize(serializedObject);
     }
 
     @Override
@@ -53,7 +66,7 @@ public class MarkerFragment extends Fragment {
     private View Initialize(View view) {
         LinearLayout layout = view.findViewById(R.id.marker_fragment_list);
 
-        View markerView = new MarkerView(view.getContext(), marker);
+        View markerView = new MarkerView(view.getContext(), marker, erajorma);
         layout.addView(markerView);
 
         return view;

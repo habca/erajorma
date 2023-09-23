@@ -61,22 +61,36 @@ public class Koordinaatit {
     }
 
     /**
-     * Azimuth between two coordinates in degrees.
+     * Bearing between two coordinates in degrees.
      * @param lat1 1st latitude in degrees
      * @param lon1 1st longitude in degrees
      * @param lat2 2nd latitude in degrees
      * @param lon2 2nd longitude in degrees
-     * @return angle between coordinates in degrees
+     * @return angle between coordinates in degrees [-180, 180]
      */
-    public static double degreesToDirection(double lat1, double lon1, double lat2, double lon2) {
+    public static double degreesToBearing(double lat1, double lon1, double lat2, double lon2) {
         lat1 = Math.toRadians(lat1);
         lon1 = Math.toRadians(lon1);
         lat2 = Math.toRadians(lat2);
         lon2 = Math.toRadians(lon2);
 
-        final double a = Math.sin(lon2 - lon1) * Math.cos(lat2);
+        final double a = Math.cos(lat2) * Math.sin(lon2 - lon1);
         final double b = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
         final double c = Math.atan2(a, b);
-        return (Math.toDegrees(c) + 360) % 360;
+        return Math.toDegrees(c);
+    }
+
+    /**
+     * Azimuth between two coordinates in degrees.
+     * @param lat1 1st latitude in degrees
+     * @param lon1 1st longitude in degrees
+     * @param lat2 2nd latitude in degrees
+     * @param lon2 2nd longitude in degrees
+     * @return angle between coordinates in degrees [0, 360]
+     */
+    public static double degreesToDirection(double lat1, double lon1, double lat2, double lon2) {
+        final double bearing = degreesToBearing(lat1, lon1, lat2, lon2);
+        final double azimuth = (bearing + 360) % 360;
+        return azimuth;
     }
 }

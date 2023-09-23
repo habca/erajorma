@@ -47,4 +47,18 @@ public interface IKarttamerkki extends Serializable, Comparable<IKarttamerkki> {
      * @return etäisyys projektiokaistan (UTM zone) pituuspiiristä.
      */
     double getEasting();
+
+    /**
+     * Matka kilometreinä GPS-koordinaattiin kompassin suuntaan.
+     * @param marker kohdepiste johon etäisyys lasketaan.
+     * @return etäisyys kilomometerinä.
+     */
+    double getDistance(IKarttamerkki marker);
+
+    /**
+     * Suunta asteina GPS-koordinaattiin karttapohjoisesta (0 N).
+     * @param marker kohdepiste johon otetaan suunta.
+     * @return suunta karttapohjoisesta (0 N) asteina.
+     */
+    double getAzimuth(IKarttamerkki marker);
 }

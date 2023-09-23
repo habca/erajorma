@@ -60,8 +60,37 @@ public class KarttamerkkiTest {
 
             double[] meters = Projektiokaavat.degreesToMeters(degrees_lat, degrees_lon);
 
+            // Compare known coordinates and projection formula.
             assertEquals(input.getNorth(), meters[0], 1);
             assertEquals(input.getEast(), meters[1], 1);
+
+            double[] degrees = Projektiokaavat.metersToDegrees(input.getNorth(), input.getEast());
+
+            // Compare known coordinates and inverse projection.
+            assertEquals(degrees_lat, degrees[0], 0.0001);
+            assertEquals(degrees_lon, degrees[1], 0.0001);
+        }
+
+        @Test
+        public void degreesToDirectionTest() {
+            double degrees_lat = Koordinaatit.dmsToDegrees(input.getLatitude());
+            double degrees_lon = Koordinaatit.dmsToDegrees(input.getLongitude());
+
+            double azimuth = Koordinaatit.degreesToDirection(degrees_lat, degrees_lon, degrees_lat, degrees_lon);
+
+            // Direction to current location is zero by default.
+            assertEquals(0, azimuth, 0.00001);
+        }
+
+        @Test
+        public void degreesToDistanceTest() {
+            double degrees_lat = Koordinaatit.dmsToDegrees(input.getLatitude());
+            double degrees_lon = Koordinaatit.dmsToDegrees(input.getLongitude());
+
+            double distance = Koordinaatit.degreesToDistance(degrees_lat, degrees_lon, degrees_lat, degrees_lon);
+
+            // Distance to current location is zero.
+            assertEquals(0, distance, 0.00001);
         }
     }
 

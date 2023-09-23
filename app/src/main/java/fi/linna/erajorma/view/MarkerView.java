@@ -7,17 +7,18 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 
 import fi.linna.erajorma.R;
+import fi.linna.erajorma.model.Erajorma;
 import fi.linna.erajorma.model.IKarttamerkki;
 import fi.linna.erajorma.model.Koordinaatit;
 
 public class MarkerView extends FrameLayout {
 
-    public MarkerView(@NonNull Context context, IKarttamerkki marker) {
+    public MarkerView(@NonNull Context context, IKarttamerkki marker, Erajorma erajorma) {
         super(context);
-        init(marker);
+        init(marker, erajorma);
     }
 
-    private void init(IKarttamerkki marker) {
+    private void init(IKarttamerkki marker, Erajorma erajorma) {
         inflate(getContext(), R.layout.view_marker, this);
 
         double marker_wgs84_latitude = Koordinaatit.dmsToDegrees(marker.getLatitude());
@@ -39,6 +40,16 @@ public class MarkerView extends FrameLayout {
 
         SetEditTextContent(R.id.marker_etrs_tm35fin_north, marker_tm35fin_north);
         SetEditTextContent(R.id.marker_etrs_tm35fin_east, marker_tm35fin_east);
+
+        IKarttamerkki location = erajorma.location;
+
+        if (location != null) {
+            double marker_azimuth = erajorma.location.getAzimuth(marker);
+            double marker_distance = erajorma.location.getDistance(marker);
+
+            SetEditTextContent(R.id.marker_azimuth, marker_azimuth);
+            SetEditTextContent(R.id.marker_distance, marker_distance);
+        }
     }
 
     private void SetEditTextContent(int layoutId, double value) {

@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import java.time.chrono.Era;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -24,10 +25,17 @@ import fi.linna.erajorma.data.Karhunkierros;
 import fi.linna.erajorma.data.Lemmenjoki;
 import fi.linna.erajorma.data.PallasHettaOlos;
 import fi.linna.erajorma.data.PyhaLuosto;
+import fi.linna.erajorma.model.Erajorma;
 import fi.linna.erajorma.model.IKarttamerkki;
 import fi.linna.erajorma.model.Karttamerkki;
 
 public class MapFragment extends Fragment {
+
+    private Erajorma erajorma;
+
+    public  MapFragment(Erajorma erajorma) {
+        this.erajorma = erajorma;
+    }
 
     @Override
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -99,20 +107,17 @@ public class MapFragment extends Fragment {
             @Override
             @RequiresApi(api = Build.VERSION_CODES.O)
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                IKarttamerkki marker = markers.get(i);
-                String serializedObject = FragmentSerializer.Serialize(marker);
-
                 Intent myIntent = new Intent(getActivity(), MarkerActivity.class);
+                IKarttamerkki marker = markers.get(i);
+
+                String serializedObject = FragmentSerializer.Serialize(marker);
+                String serializedUser = FragmentSerializer.Serialize(erajorma);
+
                 myIntent.putExtra(MarkerFragment.ARG_MARKER, serializedObject);
+                myIntent.putExtra(MarkerFragment.ARG_USER, serializedUser);
                 getActivity().startActivity(myIntent);
             }
         });
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void CreateMarkerFragment(IKarttamerkki marker) {
-        MarkerFragment fragment = MarkerFragment.newInstance(marker);
-        CreateMarkerFragment(fragment);
     }
 
     private void CreateMarkerFragment(Fragment fragment) {

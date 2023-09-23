@@ -24,13 +24,19 @@ import com.google.android.gms.location.LocationServices;
 import java.util.Date;
 
 import fi.linna.erajorma.R;
+import fi.linna.erajorma.model.Erajorma;
 import fi.linna.erajorma.model.IKarttamerkki;
 import fi.linna.erajorma.model.Karttamerkki;
 import fi.linna.erajorma.model.Koordinaatit;
 
 public class GpsFragment extends Fragment {
 
+    private Erajorma erajorma;
     private Fragment fragment;
+
+    public GpsFragment(Erajorma erajorma) {
+        this.erajorma = erajorma;
+    }
 
     @Override
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -92,12 +98,14 @@ public class GpsFragment extends Fragment {
                         double latitude = location.getLatitude();
                         double longitude = location.getLongitude();
 
-                        Date date = new Date(location.getTime());
-
                         double[] latDms = Koordinaatit.degreesToDms(latitude);
                         double[] lonDms = Koordinaatit.degreesToDms(longitude);
 
                         IKarttamerkki marker = new Karttamerkki("GPS", latDms, lonDms);
+                        Date date = new Date(location.getTime());
+
+                        erajorma.location = marker;
+                        erajorma.time = date;
 
                         Button button = root.findViewById(R.id.navigaattori);
                         button.setEnabled(true);
@@ -112,7 +120,7 @@ public class GpsFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void CreateMarkerFragment(IKarttamerkki marker) {
-        MarkerFragment fragment = MarkerFragment.newInstance(marker);
+        MarkerFragment fragment = MarkerFragment.newInstance(marker, erajorma);
         CreateMarkerFragment(fragment);
     }
 

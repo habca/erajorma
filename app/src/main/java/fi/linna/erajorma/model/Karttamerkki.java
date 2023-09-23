@@ -76,6 +76,30 @@ public class Karttamerkki implements IKarttamerkki, Serializable {
     }
 
     @Override
+    public double getDistance(IKarttamerkki marker) {
+        double lat1 = Koordinaatit.dmsToDegrees(getLatitude());
+        double lon1 = Koordinaatit.dmsToDegrees(getLongitude());
+
+        double lat2 = Koordinaatit.dmsToDegrees(marker.getLatitude());
+        double lon2 = Koordinaatit.dmsToDegrees(marker.getLongitude());
+
+        double distance = Koordinaatit.degreesToDistance(lat1, lon1, lat2, lon2);
+        return distance;
+    }
+
+    @Override
+    public double getAzimuth(IKarttamerkki marker) {
+        double lat1 = Koordinaatit.dmsToDegrees(getLatitude());
+        double lon1 = Koordinaatit.dmsToDegrees(getLongitude());
+
+        double lat2 = Koordinaatit.dmsToDegrees(marker.getLatitude());
+        double lon2 = Koordinaatit.dmsToDegrees(marker.getLongitude());
+
+        double azimuth = Koordinaatit.degreesToDirection(lat1, lon1, lat2, lon2);
+        return azimuth;
+    }
+
+    @Override
     public String toString() {
         String latitude = String.format("lat: %.0f\u00B0 %.4f\u2032", lat[0], lat[1]);
         String longitude = String.format("lon: %.0f\u00B0 %.4f\u2032", lon[0], lon[1]);

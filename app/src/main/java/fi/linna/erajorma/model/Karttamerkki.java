@@ -99,29 +99,25 @@ public class Karttamerkki implements IKarttamerkki, Serializable {
         return azimuth;
     }
 
-    private double getDistance(IKarttamerkki marker, double scale)
-    {
-        double distance_km = getDistance(marker);
-        double distance_cm = distance_km * 100;
-        return distance_cm * scale;
-    }
-
     @Override
     public double getDistance25000(IKarttamerkki marker) {
-        double scale = 1 / 25000;
-        return getDistance(marker, scale);
+        double distance_km = getDistance(marker);
+        double map_scale = 1.0 / 25000.0;
+        return Koordinaatit.distanceOnMap(distance_km, map_scale);
     }
 
     @Override
     public double getDistance50000(IKarttamerkki marker) {
-        double scale = 1 / 50000;
-        return getDistance(marker, scale);
+        double distance_km = getDistance(marker);
+        double map_scale = 1.0 / 50000.0;
+        return Koordinaatit.distanceOnMap(distance_km, map_scale);
     }
 
     @Override
     public double getDistance100000(IKarttamerkki marker) {
-        double scale = 1 / 100000;
-        return getDistance(marker, scale);
+        double distance_km = getDistance(marker);
+        double map_scale = 1.0 / 100000.0;
+        return Koordinaatit.distanceOnMap(distance_km, map_scale);
     }
 
     @Override

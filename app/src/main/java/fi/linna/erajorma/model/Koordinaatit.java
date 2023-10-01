@@ -93,4 +93,10 @@ public class Koordinaatit {
         final double azimuth = (bearing + 360) % 360;
         return azimuth;
     }
+
+    public static double distanceOnMap(double distance_km, double map_scale)
+    {
+        double distance_cm = distance_km * 100000.0;
+        return distance_cm * map_scale;
+    }
 }

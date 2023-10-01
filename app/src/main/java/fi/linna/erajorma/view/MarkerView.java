@@ -51,12 +51,12 @@ public class MarkerView extends FrameLayout {
 
         IKarttamerkki location = erajorma.location;
 
-        if (location != null) {
-            double marker_azimuth = erajorma.location.getAzimuth(marker);
-            double marker_distance = erajorma.location.getDistance(marker);
-
-            SetEditTextContent(R.id.marker_azimuth, marker_azimuth, "°");
-            SetEditTextContent(R.id.marker_distance, marker_distance, "km");
+        if (location != null && !location.getName().equals(marker.getName())) {
+            SetEditTextContent(R.id.marker_azimuth, location.getAzimuth(marker), "°");
+            SetEditTextContent(R.id.marker_distance_km, location.getDistance(marker), "km");
+            SetEditTextContent(R.id.marker_distance_25000, location.getDistance25000(marker), "cm");
+            SetEditTextContent(R.id.marker_distance_50000, location.getDistance50000(marker), "cm");
+            SetEditTextContent(R.id.marker_distance_100000, location.getDistance100000(marker), "cm");
         }
     }
 

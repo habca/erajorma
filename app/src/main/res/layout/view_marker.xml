@@ -260,7 +260,52 @@
                     android:gravity="center_vertical"
                     android:text="Distance" />
                 <EditText
-                    android:id="@+id/marker_distance"
+                    android:id="@+id/marker_distance_km"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="1:25 000" />
+                <EditText
+                    android:id="@+id/marker_distance_25000"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="1:50 000" />
+                <EditText
+                    android:id="@+id/marker_distance_50000"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="1:100 000" />
+                <EditText
+                    android:id="@+id/marker_distance_100000"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"

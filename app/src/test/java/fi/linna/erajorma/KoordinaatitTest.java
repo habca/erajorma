@@ -186,4 +186,15 @@ public class KoordinaatitTest {
 
         assertEquals(azimuth, (bearing + 360) % 360, 0.0001);
     }
+
+    @Test
+    public void distanceOnMapTest() {
+        assertEquals(4, Koordinaatit.distanceOnMap(1, 1.0 / 25000.0), EPSILON);
+        assertEquals(2, Koordinaatit.distanceOnMap(1, 1.0 / 50000.0), EPSILON);
+        assertEquals(1, Koordinaatit.distanceOnMap(1, 1.0 / 100000.0), EPSILON);
+
+        assertEquals(32722.8, Koordinaatit.distanceOnMap(8180.6946, 1.0 / 25000.0), 0.1);
+        assertEquals(16361.4, Koordinaatit.distanceOnMap(8180.6946, 1.0 / 50000.0), 0.1);
+        assertEquals(8180.7, Koordinaatit.distanceOnMap(8180.6946, 1.0 / 100000.0), 0.1);
+    }
 }

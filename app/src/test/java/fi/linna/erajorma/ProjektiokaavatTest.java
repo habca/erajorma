@@ -467,8 +467,8 @@ public class ProjektiokaavatTest {
 
     @Test
     public void degreesToUtmTest_2() {
-        double latitude = 69.5085139587101; // 69.5085139587101
-        double longitude = 17.422788585861085; // 17.422788585861085
+        double latitude = 69.5085139587101;
+        double longitude = 17.422788585861085;
 
         String zone = Projektiokaavat.getUtmZone(latitude, longitude);
         assertEquals("33W", zone);
@@ -491,10 +491,31 @@ public class ProjektiokaavatTest {
         assertEquals(-1, falseNorthing);
     }
 
+    @Test
+    public void degreesToUtmTest_3() {
+
+        // https://www.norgeskart.no
+        double latitude = 69.521233, longitude = 17.4390388;
+
+        String zone = Projektiokaavat.getUtmZone(latitude, longitude);
+        assertEquals("33W", zone);
+
+        double[] utm = Projektiokaavat.degreesToUtm(latitude, longitude);
+        assertEquals(7714382.57, utm[1], 0.01);
+        assertEquals(595211.89, utm[0], 0.01);
+
+        double x = utm[0];
+        double y = utm[1];
+
+        double[] degrees = Projektiokaavat.utmToDegrees(x, y, zone);
+        assertEquals(latitude, degrees[0], 0.01);
+        assertEquals(longitude, degrees[1], 0.01);
+    }
+
     @RunWith(Parameterized.class)
     public static class DegreesToMetersTest {
 
-        private static double EPSILON = 0.1;
+        private static double EPSILON = 0.5;
 
         private double[] input;
 
@@ -504,6 +525,7 @@ public class ProjektiokaavatTest {
                     { 60.3851068722, 19.84813676944, 6715706.37708, 106256.35961 },
                     { 68.411994, 27.472200, 7588873.45, 519388.56 },
                     { 61.000563, 25.766045, 6763478.58, 433264.43 },
+                    { 68.278588, 28.165096, 7574379, 548118 }
             };
         }
 

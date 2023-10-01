@@ -67,6 +67,9 @@ public class KoordinaatitTest {
         public void degreesToDmsTest() {
             double[] dms = Koordinaatit.degreesToDms(input);
 
+            // First DMS decimal equals degrees.
+            assertEquals(input, dms[0], EPSILON);
+
             assertEquals(expected[0], Math.floor(dms[0]), EPSILON);
             assertEquals(expected[1], Math.floor(dms[1]), EPSILON);
             assertEquals(expected[2], Math.round(dms[2]), EPSILON);

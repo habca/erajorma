@@ -1,211 +1,275 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:showDividers="middle"
-    android:divider="@android:drawable/divider_horizontal_textfield"
-    android:padding="10dp">
-
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="WGS84" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="115dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Latitude" />
-            <EditText
-                android:id="@+id/marker_wgs84_latitude"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:enabled="false" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="115dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Longitude" />
-            <EditText
-                android:id="@+id/marker_wgs84_longitude"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:enabled="false" />
-        </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="15dp" />
-    </LinearLayout>
+        android:orientation="vertical"
+        android:showDividers="middle"
+        android:divider="@android:drawable/divider_horizontal_textfield"
+        android:padding="10dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="15dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="UTM" />
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <TextView
-                android:layout_width="115dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Zone" />
-            <EditText
-                android:id="@+id/marker_utm_zone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:enabled="false" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="115dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="North" />
-            <EditText
-                android:id="@+id/marker_utm_north"
+                android:text="WGS84" />
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:enabled="false" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="115dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="East" />
-            <EditText
-                android:id="@+id/marker_utm_east"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Latitude" />
+                <EditText
+                    android:id="@+id/marker_wgs84_latitude_d"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:enabled="false" />
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="" />
+                <EditText
+                    android:id="@+id/marker_wgs84_latitude_dm"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="" />
+                <EditText
+                    android:id="@+id/marker_wgs84_latitude_dms"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Longitude" />
+                <EditText
+                    android:id="@+id/marker_wgs84_longitude_d"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="" />
+                <EditText
+                    android:id="@+id/marker_wgs84_longitude_dm"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="" />
+                <EditText
+                    android:id="@+id/marker_wgs84_longitude_dms"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
         </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="15dp" />
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="15dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="ETRS-TM35FIN" />
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <TextView
-                android:layout_width="115dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="North" />
-            <EditText
-                android:id="@+id/marker_etrs_tm35fin_north"
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:enabled="false" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="115dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="East" />
-            <EditText
-                android:id="@+id/marker_etrs_tm35fin_east"
+                android:text="UTM" />
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:enabled="false" />
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Zone" />
+                <EditText
+                    android:id="@+id/marker_utm_zone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="North" />
+                <EditText
+                    android:id="@+id/marker_utm_north"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="East" />
+                <EditText
+                    android:id="@+id/marker_utm_east"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
         </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="15dp" />
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="15dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="SUUNTO A-30" />
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <TextView
-                android:layout_width="115dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Azimuth" />
-            <EditText
-                android:id="@+id/marker_azimuth"
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:enabled="false" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="115dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Distance" />
-            <EditText
-                android:id="@+id/marker_distance"
+                android:text="ETRS-TM35FIN" />
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:enabled="false" />
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="North" />
+                <EditText
+                    android:id="@+id/marker_etrs_tm35fin_north"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="East" />
+                <EditText
+                    android:id="@+id/marker_etrs_tm35fin_east"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
         </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="15dp" />
-    </LinearLayout>
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="SUUNTO A-30" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Azimuth" />
+                <EditText
+                    android:id="@+id/marker_azimuth"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Distance" />
+                <EditText
+                    android:id="@+id/marker_distance"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:enabled="false" />
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

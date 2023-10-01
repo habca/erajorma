@@ -99,6 +99,31 @@ public class Karttamerkki implements IKarttamerkki, Serializable {
         return azimuth;
     }
 
+    private double getDistance(IKarttamerkki marker, double scale)
+    {
+        double distance_km = getDistance(marker);
+        double distance_cm = distance_km * 100;
+        return distance_cm * scale;
+    }
+
+    @Override
+    public double getDistance25000(IKarttamerkki marker) {
+        double scale = 1 / 25000;
+        return getDistance(marker, scale);
+    }
+
+    @Override
+    public double getDistance50000(IKarttamerkki marker) {
+        double scale = 1 / 50000;
+        return getDistance(marker, scale);
+    }
+
+    @Override
+    public double getDistance100000(IKarttamerkki marker) {
+        double scale = 1 / 100000;
+        return getDistance(marker, scale);
+    }
+
     @Override
     public String toString() {
         String latitude = String.format("lat: %.0f\u00B0 %.4f\u2032", lat[0], lat[1]);

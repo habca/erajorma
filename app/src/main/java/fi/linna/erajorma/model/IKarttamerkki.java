@@ -61,4 +61,25 @@ public interface IKarttamerkki extends Serializable, Comparable<IKarttamerkki> {
      * @return suunta karttapohjoisesta (0 N) asteina.
      */
     double getAzimuth(IKarttamerkki marker);
+
+    /**
+     * Matkan pituus senttimetreinä 1:25 000 mittasuhteen kartalla.
+     * @param marker kohdepiste johon etäisyys lasketaan.
+     * @return etäisyys kartalla.
+     */
+    double getDistance25000(IKarttamerkki marker);
+
+    /**
+     * Matkan pituus senttimetreinä 1:50 000 mittasuhteen kartalla.
+     * @param marker kohdepiste johon etäisyys lasketaan.
+     * @return etäisyys kartalla.
+     */
+    double getDistance50000(IKarttamerkki marker);
+
+    /**
+     * Matkan pituus senttimetreinä 1:100 000 mittasuhteen kartalla.
+     * @param marker kohdepiste johon etäisyys lasketaan.
+     * @return etäisyys kartalla.
+     */
+    double getDistance100000(IKarttamerkki marker);
 }

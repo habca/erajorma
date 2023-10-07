@@ -2,7 +2,7 @@
 
 Sovellus kertoo GPS-sijainnin noin 50 m tarkkuudella.
 
-- Androidin geodeettinen koordinaatisto WGS84.
+- Maantieteelliset koordinaatit WGS84-koordinaatistossa.
 - Suomen maastokarttojen karttaprojektio ETRS-TM35FIN.
 - Norjan maastokarttojen karttaprojektio UTM.
 
@@ -62,6 +62,8 @@ systemctl enable --now snapd.socket
 ln -s /var/lib/snapd/snap /snap
 snap install android-studio --classic
 ```
+
+![alt Snap](images/Screenshot%20from%202023-10-07%2011-48-57.png)
 
 ## Terminal
 

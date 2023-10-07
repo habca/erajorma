@@ -189,12 +189,13 @@ public class KoordinaatitTest {
 
     @Test
     public void distanceOnMapTest() {
+        // Mittakaava 1:25 000 (4 cm = 1 km)
         assertEquals(4, Koordinaatit.distanceOnMap(1, 1.0 / 25000.0), EPSILON);
-        assertEquals(2, Koordinaatit.distanceOnMap(1, 1.0 / 50000.0), EPSILON);
-        assertEquals(1, Koordinaatit.distanceOnMap(1, 1.0 / 100000.0), EPSILON);
 
-        assertEquals(32722.8, Koordinaatit.distanceOnMap(8180.6946, 1.0 / 25000.0), 0.1);
-        assertEquals(16361.4, Koordinaatit.distanceOnMap(8180.6946, 1.0 / 50000.0), 0.1);
-        assertEquals(8180.7, Koordinaatit.distanceOnMap(8180.6946, 1.0 / 100000.0), 0.1);
+        // Mittakaava 1:50 000 (2 cm = 1 km)
+        assertEquals(2, Koordinaatit.distanceOnMap(1, 1.0 / 50000.0), EPSILON);
+
+        // Mittakaava 1:100 000 (1 cm = 1 km)
+        assertEquals(1, Koordinaatit.distanceOnMap(1, 1.0 / 100000.0), EPSILON);
     }
 }

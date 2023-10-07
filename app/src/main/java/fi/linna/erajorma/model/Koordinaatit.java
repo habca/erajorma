@@ -96,7 +96,12 @@ public class Koordinaatit {
 
     public static double distanceOnMap(double distance_km, double map_scale)
     {
-        double distance_cm = distance_km * 100000.0;
-        return distance_cm * map_scale;
+        double distance_cm = distance_km * map_scale * 100000.0;
+        return distance_cm;
+    }
+
+    public static double distanceOnNature(double distance_cm, double map_scale) {
+        double distance_km = distance_cm / map_scale / 100000.0;
+        return distance_km;
     }
 }

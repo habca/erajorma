@@ -198,4 +198,16 @@ public class KoordinaatitTest {
         // Mittakaava 1:100 000 (1 cm = 1 km)
         assertEquals(1, Koordinaatit.distanceOnMap(1, 1.0 / 100000.0), EPSILON);
     }
+
+    @Test
+    public void distanceOnNatureTest() {
+        // Mittakaava 1:25 000 (1 cm = 250 m)
+        assertEquals(0.250, Koordinaatit.distanceOnNature(1, 1.0 / 25000.0), EPSILON);
+
+        // Mittakaava 1:50 000 (1 cm = 500 m)
+        assertEquals(0.500, Koordinaatit.distanceOnNature(1, 1.0 / 50000.0), EPSILON);
+
+        // Mittakaava 1:100 000 (1 cm = 1 km = 1 000 m)
+        assertEquals(1.000, Koordinaatit.distanceOnNature(1, 1.0 / 100000.0), EPSILON);
+    }
 }

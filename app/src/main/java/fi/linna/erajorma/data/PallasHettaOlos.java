@@ -1,17 +1,17 @@
 package fi.linna.erajorma.data;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
-import fi.linna.erajorma.model.IKarttamerkki;
 import fi.linna.erajorma.model.Karttamerkki;
 
-public class PallasHettaOlos extends ArrayList<IKarttamerkki> {
+public class PallasHettaOlos extends AMaastokartta {
 
     /**
      * Pallaksen, Hetan ja Oloksen tupien koordinaatit.
      */
     public PallasHettaOlos() {
+        super(1.0 / 50000.0, 2019, 10.33, 0.25, 2.78);
+
         this.addAll(Arrays.asList(new Karttamerkki[] {
                 new Karttamerkki("Aittalahti", new double[] { 68, 0.744 }, new double[] { 24, 14.928 }),
                 new Karttamerkki("Hannukuru", new double[] { 68, 13.080 }, new double[] { 23, 56.934 }),

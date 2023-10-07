@@ -1,17 +1,17 @@
 package fi.linna.erajorma.data;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
-import fi.linna.erajorma.model.IKarttamerkki;
 import fi.linna.erajorma.model.Karttamerkki;
 
-public class Karhunkierros extends ArrayList<IKarttamerkki> {
+public class Karhunkierros extends AMaastokartta {
 
     /**
      * Karhunkierroksen tupien koordinaatit.
      */
     public Karhunkierros() {
+        super(1.0 / 25000.0, 2019, 12.5, 0.2);
+
         this.addAll(Arrays.asList(new Karttamerkki[] {
                 new Karttamerkki("Aitaniitty", new double[] { 66, 19.7389 }, new double[] { 29, 31.8963 }, 7358875, 613393),
                 new Karttamerkki("Ansakämppä", new double[] { 66, 20.9317 }, new double[] { 29, 26.5978 }, 7360932, 609353),

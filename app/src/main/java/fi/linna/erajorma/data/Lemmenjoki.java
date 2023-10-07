@@ -1,17 +1,17 @@
 package fi.linna.erajorma.data;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
-import fi.linna.erajorma.model.IKarttamerkki;
 import fi.linna.erajorma.model.Karttamerkki;
 
-public class Lemmenjoki extends ArrayList<IKarttamerkki> {
+public class Lemmenjoki extends AMaastokartta {
 
     /**
      * Lemmenjoen tupien koordinaatit.
      */
     public Lemmenjoki() {
+        super(1.0 / 25000.0, 2017, 10.5, 0.2);
+
         this.addAll(Arrays.asList(new Karttamerkki[] {
                 new Karttamerkki("Härkäkoski", new double[] { 68, 42.0465 }, new double[] { 25, 59.5699 }, 7621332, 459173),
 

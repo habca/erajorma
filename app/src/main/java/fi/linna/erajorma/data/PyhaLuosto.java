@@ -1,17 +1,17 @@
 package fi.linna.erajorma.data;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
-import fi.linna.erajorma.model.IKarttamerkki;
 import fi.linna.erajorma.model.Karttamerkki;
 
-public class PyhaLuosto extends ArrayList<IKarttamerkki> {
+public class PyhaLuosto extends AMaastokartta {
 
     /**
      * Pyhä Luoston tupien koordinaatit.
      */
     public PyhaLuosto() {
+        super(1.0 / 25000.0, 2019, 11.63, 0.24, 0.06);
+
         this.addAll(Arrays.asList(new Karttamerkki[] {
                 new Karttamerkki("Haarainselkä", new double[] { 66, 59.520 }, new double[] { 27, 10.008 }),
                 new Karttamerkki("Kapusta", new double[] { 67, 03.689 }, new double[] { 27, 00.092 }),

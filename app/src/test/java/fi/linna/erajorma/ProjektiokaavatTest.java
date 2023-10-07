@@ -255,6 +255,41 @@ public class ProjektiokaavatTest {
     }
 
     @Test
+    public void meridianConvergenceTest() {
+
+        // GRS80-vertausellipsoidin parametrit:
+
+        double f = 1 / 298.257222101;
+
+        // Karttaprojektion parametrit:
+
+        double lambda_nolla = Math.toRadians(27); // 27 E
+
+        // Apusuureet:
+
+        double e_toiseen = (2.0 * f) - Math.pow(f, 2);
+        assertEquals(0.006694380023, e_toiseen, 0.000000000001);
+
+        double e_pilkku_toiseen = e_toiseen / (1.0 - e_toiseen);
+        assertEquals(0.006739496775, e_pilkku_toiseen, 0.000000000001);
+
+        // Meridiaanikonvergenssi geodeettisista koordinaateista
+
+        double fii = 1.053918934088933; // rad
+        double lambda = 0.346415337012956; // rad
+
+        double l = lambda - lambda_nolla;
+        assertEquals(-0.124823561025513, l, 0.000000000000001);
+
+        double V_toiseen = 1.0 + e_pilkku_toiseen * Math.pow(Math.cos(fii), 2.0);
+        assertEquals(1.00164579775, V_toiseen, 0.00000000001);
+
+        double gamma = l * Math.sin(fii) * (1.0 + 1.0 / 3.0 * V_toiseen * (2.0 * V_toiseen - 1.0) * Math.pow(Math.cos(fii), 2.0) * Math.pow(l, 2.0));
+        assertEquals(-0.108655736, gamma, 0.000000001);
+        assertEquals(-6.225515089, Math.toDegrees(gamma), 0.000000001);
+    }
+
+    @Test
     public void degreesToUtmTest() {
 
         double latitude = Koordinaatit.dmsToDegrees(40, 30, 0);

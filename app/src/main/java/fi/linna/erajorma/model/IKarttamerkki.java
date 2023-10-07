@@ -63,23 +63,31 @@ public interface IKarttamerkki extends Serializable, Comparable<IKarttamerkki> {
     double getAzimuth(IKarttamerkki marker);
 
     /**
+     * Kartta- ja napapohjoisen (todellinen pohjoinen) välinen kulma.
+     * Keskimeridiaanin itäpuolella positiivinen ja negatiivinen länsipuolella.
+     * NAK on yhtä suuri kuin meridiaanikonvergenssi, mutta vastakkaismerkkinen.
+     * @return napaluvun korjaus asteina (NAK).
+     */
+    double getNak();
+
+    /**
      * Matkan pituus senttimetreinä 1:25 000 mittasuhteen kartalla.
      * @param marker kohdepiste johon etäisyys lasketaan.
-     * @return etäisyys kartalla.
+     * @return etäisyys kartalla (cm).
      */
     double getDistance25000(IKarttamerkki marker);
 
     /**
      * Matkan pituus senttimetreinä 1:50 000 mittasuhteen kartalla.
      * @param marker kohdepiste johon etäisyys lasketaan.
-     * @return etäisyys kartalla.
+     * @return etäisyys kartalla (cm).
      */
     double getDistance50000(IKarttamerkki marker);
 
     /**
      * Matkan pituus senttimetreinä 1:100 000 mittasuhteen kartalla.
      * @param marker kohdepiste johon etäisyys lasketaan.
-     * @return etäisyys kartalla.
+     * @return etäisyys kartalla (cm).
      */
     double getDistance100000(IKarttamerkki marker);
 }

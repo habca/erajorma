@@ -100,6 +100,15 @@ public class Karttamerkki implements IKarttamerkki, Serializable {
     }
 
     @Override
+    public double getNak() {
+        double latitude = Koordinaatit.dmsToDegrees(getLatitude());
+        double longitude = Koordinaatit.dmsToDegrees(getLongitude());
+
+        double angle = Projektiokaavat.meridianConvergence(latitude, longitude);
+        return -angle;
+    }
+
+    @Override
     public double getDistance25000(IKarttamerkki marker) {
         double distance_km = getDistance(marker);
         double map_scale = 1.0 / 25000.0;

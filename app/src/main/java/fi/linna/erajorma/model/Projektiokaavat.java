@@ -129,6 +129,36 @@ public class Projektiokaavat {
         return new double[] { latitude, longitude };
     }
 
+    /**
+     * ETRS-TM35FIN center meridian convergence according to the JHS 197 EUREF-FIN.
+     */
+    public static double meridianConvergence(double latitude, double longitude)
+    {
+        // GRS80-vertausellipsoidin parametrit:
+
+        double f = 1 / 298.257222101;
+
+        // Karttaprojektion parametrit:
+
+        double lambda_nolla = Math.toRadians(27); // 27 E
+
+        // Apusuureet:
+
+        double e_toiseen = (2.0 * f) - Math.pow(f, 2);
+        double e_pilkku_toiseen = e_toiseen / (1.0 - e_toiseen);
+
+        // Meridiaanikonvergenssi geodeettisista koordinaateista
+
+        double fii = Math.toRadians(latitude);
+        double lambda = Math.toRadians(longitude);
+
+        double l = lambda - lambda_nolla;
+        double V_toiseen = 1.0 + e_pilkku_toiseen * Math.pow(Math.cos(fii), 2.0);
+        double gamma = l * Math.sin(fii) * (1.0 + 1.0 / 3.0 * V_toiseen * (2.0 * V_toiseen - 1.0) * Math.pow(Math.cos(fii), 2.0) * Math.pow(l, 2.0));
+
+        return Math.toDegrees(gamma);
+    }
+
     public static double arcsinh(double x) {
         return Math.log(x + Math.sqrt(Math.pow(x, 2.0) + 1.0));
     }

@@ -1,5 +1,6 @@
 package fi.linna.erajorma.model;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class Koordinaatit {
 
     /**
@@ -47,6 +48,7 @@ public class Koordinaatit {
      * @param lon2 2nd longitude in degrees
      * @return distance between coordinates in kilometers
      */
+    @SuppressWarnings("ReassignedVariable")
     public static double degreesToDistance(double lat1, double lon1, double lat2, double lon2) {
         lat1 = Math.toRadians(lat1);
         lon1 = Math.toRadians(lon1);
@@ -68,6 +70,7 @@ public class Koordinaatit {
      * @param lon2 2nd longitude in degrees
      * @return angle between coordinates in degrees [-180, 180]
      */
+    @SuppressWarnings("ReassignedVariable")
     public static double degreesToBearing(double lat1, double lon1, double lat2, double lon2) {
         lat1 = Math.toRadians(lat1);
         lon1 = Math.toRadians(lon1);

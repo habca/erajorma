@@ -1,5 +1,6 @@
 package fi.linna.erajorma.model;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class Projektiokaavat {
 
     /**
@@ -66,6 +67,7 @@ public class Projektiokaavat {
     /**
      * From ETRS-TM35FIN to WGS84 conversion according to the JHS 197 EUREF-FIN.
      */
+    @SuppressWarnings("ReassignedVariable")
     public static double[] metersToDegrees(double N, double E) {
 
         // GRS80-vertausellipsoidin parametrit:
@@ -162,6 +164,7 @@ public class Projektiokaavat {
     /**
      * ETRS-TM35FIN correction of directional angle according to the JHS 197 EUREF-FIN.
      */
+    @SuppressWarnings("ReassignedVariable")
     public static double arcToChordCorrection(double N1, double E1, double N2, double E2) {
 
         // GRS80-vertausellipsoidin parametrit:
@@ -294,6 +297,7 @@ public class Projektiokaavat {
      * @param y northing in meters
      * @return [latitude, longitude]
      */
+    @SuppressWarnings("ReassignedVariable")
     public static double[] utmToDegrees(double x, double y, String zone) {
 
         int falseEasting = Projektiokaavat.getUtmFalseEasting(zone);

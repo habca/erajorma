@@ -7,8 +7,8 @@ public class Koordinaatit {
      * @return [degrees, minutes, seconds]
      */
     public static double[] degreesToDms(double degrees) {
-        final double mmm = minutesToSeconds(degrees);
-        final double sss = minutesToSeconds(mmm);
+        double mmm = minutesToSeconds(degrees);
+        double sss = minutesToSeconds(mmm);
         return new double[] { degrees, mmm, sss };
     }
 
@@ -53,15 +53,15 @@ public class Koordinaatit {
         lat2 = Math.toRadians(lat2);
         lon2 = Math.toRadians(lon2);
 
-        final double a = Math.pow(Math.sin((lat2 - lat1) * 0.5), 2);
-        final double b = Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin((lon2 - lon1) * 0.5), 2);
-        final double c = 2 * Math.asin(Math.sqrt(a + b));
-        final double r = 6371;
+        double a = Math.pow(Math.sin((lat2 - lat1) * 0.5), 2);
+        double b = Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin((lon2 - lon1) * 0.5), 2);
+        double c = 2 * Math.asin(Math.sqrt(a + b));
+        double r = 6371;
         return c * r;
     }
 
     /**
-     * Bearing between two coordinates in degrees.
+     * Bearing between two WGS84 coordinates in degrees.
      * @param lat1 1st latitude in degrees
      * @param lon1 1st longitude in degrees
      * @param lat2 2nd latitude in degrees
@@ -74,23 +74,44 @@ public class Koordinaatit {
         lat2 = Math.toRadians(lat2);
         lon2 = Math.toRadians(lon2);
 
-        final double a = Math.cos(lat2) * Math.sin(lon2 - lon1);
-        final double b = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
-        final double c = Math.atan2(a, b);
+        double a = Math.cos(lat2) * Math.sin(lon2 - lon1);
+        double b = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+        double c = Math.atan2(a, b);
         return Math.toDegrees(c);
     }
 
+    /*
+     * Bearing between two ETRS-TM35FIN coordinates in degrees.
+     * @param N1 1st latitude in meters
+     * @param E1 1st longitude in meters
+     * @param N2 2nd latitude in meters
+     * @param E2 2nd longitude in meters
+     * @return angle between coordinates in degrees [-180, 180]
+     */
+    public static double metersToBearing(double N1, double E1, double N2, double E2) {
+        double y = N2 - N1;
+        double x = E2 - E1;
+        double angle = Math.atan2(x, y);
+        return Math.toDegrees(angle);
+    }
+
     /**
-     * Azimuth between two coordinates in degrees.
+     * Azimuth between two WGS84 coordinates in degrees.
      * @param lat1 1st latitude in degrees
      * @param lon1 1st longitude in degrees
      * @param lat2 2nd latitude in degrees
      * @param lon2 2nd longitude in degrees
-     * @return angle between coordinates in degrees [0, 360]
+     * @return angle between WGS84 coordinates in degrees [0, 360]
      */
     public static double degreesToDirection(double lat1, double lon1, double lat2, double lon2) {
-        final double bearing = degreesToBearing(lat1, lon1, lat2, lon2);
-        final double azimuth = (bearing + 360) % 360;
+        double bearing = degreesToBearing(lat1, lon1, lat2, lon2);
+        double azimuth = (bearing + 360) % 360;
+        return azimuth;
+    }
+
+    public static double metersToDirection(double N1, double E1, double N2, double E2) {
+        double bearing = metersToBearing(N1, E1, N2, E2);
+        double azimuth = (bearing + 360) % 360;
         return azimuth;
     }
 

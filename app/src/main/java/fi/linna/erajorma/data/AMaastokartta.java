@@ -8,9 +8,9 @@ public abstract class AMaastokartta extends ArrayList<IKarttamerkki> {
 
     public double mapScale;
     public int nekYear;
-    public double nek;
-    public double nekYearly;
-    public double nak;
+    private double nek;
+    private double nekYearly;
+    private double nak;
 
     public AMaastokartta(double mapScale, int nekYear, double nek, double nekYearly, double nak) {
         this.mapScale = mapScale;
@@ -24,7 +24,15 @@ public abstract class AMaastokartta extends ArrayList<IKarttamerkki> {
         this(mapScale, nekYear, nek, nekYearly, 0.0);
     }
 
+    public double getNak() {
+        return nak;
+    }
+
+    public double getNek(int year) {
+        return nek + nekYearly * (year - this.nekYear);
+    }
+
     public double getKok(int year) {
-        return nak + nek + nekYearly * (year - this.nekYear);
+        return getNak() + getNek(year);
     }
 }

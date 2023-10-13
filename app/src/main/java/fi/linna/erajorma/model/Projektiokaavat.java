@@ -159,6 +159,66 @@ public class Projektiokaavat {
         return Math.toDegrees(gamma);
     }
 
+    /**
+     * ETRS-TM35FIN correction of directional angle according to the JHS 197 EUREF-FIN.
+     */
+    public static double arcToChordCorrection(double N1, double E1, double N2, double E2) {
+
+        // GRS80-vertausellipsoidin parametrit:
+
+        double a = 6378137;
+        double b = 6356752.314140;
+        double f = 1 / 298.257222101;
+
+        // Karttaprojektion parametrit:
+
+        double E_nolla = 500000;
+
+        // Apusuureet:
+
+        double e_toiseen = (2.0 * f) - Math.pow(f, 2);
+        double e_pilkku_toiseen = e_toiseen / (1.0 - e_toiseen);
+
+        // Suuntakorjaus meridiaanikonvergenssista ja ellipsoidin parametreista
+
+        double latitude = Projektiokaavat.metersToDegrees(N1, E1)[0];
+
+        E1 = E1 - E_nolla;
+        E2 = E2 - E_nolla;
+
+        double fii = Math.toRadians(latitude);
+        double V = Math.sqrt(1.0 + e_pilkku_toiseen * Math.pow(Math.cos(fii), 2.0));
+
+        double c = Math.pow(a, 2.0) / b;
+        double M =  c / Math.pow(V, 3.0);
+
+        double N = c / V;
+        double R = Math.sqrt(M * N);
+
+        double delta = 1.0 / (6.0 * Math.pow(R, 2.0)) * (N2 - N1) * (2.0 * E1 + E2);
+
+        return Math.toDegrees(delta);
+    }
+
+    /**
+     * ETRS-TM35FIN koordinaattien suuntakulma (t) projektiotasolla.
+     */
+    public static double directionalAngle(double N1, double E1, double N2, double E2) {
+
+        double[] dms1 = Projektiokaavat.metersToDegrees(N1, E1);
+        double[] dms2 = Projektiokaavat.metersToDegrees(N2, E2);
+
+        double lat1 = dms1[0], lon1 = dms1[1];
+        double lat2 = dms2[0], lon2 = dms2[1];
+
+        double alfa = Koordinaatit.degreesToDirection(lat1, lon1, lat2, lon2);
+        double gamma = Projektiokaavat.meridianConvergence(lat1, lon1);
+        double delta = Projektiokaavat.arcToChordCorrection(N1, E1, N2, E2);
+
+        double t = alfa - gamma - delta;
+        return t;
+    }
+
     public static double arcsinh(double x) {
         return Math.log(x + Math.sqrt(Math.pow(x, 2.0) + 1.0));
     }

@@ -63,6 +63,22 @@ public class Koordinaatit {
     }
 
     /**
+     * Hypothenuse of a rectangular triangle.
+     * @param N1 1st latitude in meters
+     * @param E1 1st longitude in meters
+     * @param N2 2nd latitude in meters
+     * @param E2 2nd longitude in meters
+     * @return distance between coordinates in kilometers
+     */
+    @SuppressWarnings("ReassignedVariable")
+    public static double metersToDistance(double N1, double E1, double N2, double E2) {
+        double y = N2 - N1;
+        double x = E2 - E1;
+        double h = Math.sqrt(Math.pow(x, 2.0) + Math.pow(y, 2.0));
+        return h / 1000.0;
+    }
+
+    /**
      * Bearing between two WGS84 coordinates in degrees.
      * @param lat1 1st latitude in degrees
      * @param lon1 1st longitude in degrees

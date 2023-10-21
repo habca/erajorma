@@ -1,6 +1,7 @@
 package fi.linna.erajorma;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import androidx.annotation.NonNull;
 
@@ -12,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import fi.linna.erajorma.model.Koordinaatit;
+import fi.linna.erajorma.model.Projektiokaavat;
 
 public class KoordinaatitTest {
 
@@ -104,14 +106,42 @@ public class KoordinaatitTest {
     }
 
     @Test
-    public void degreesToDistanceTest() {
+    public void degreesToDistanceTest_1() {
         double lat1 = Koordinaatit.dmsToDegrees(50, 3, 59);
         double lon1 = Koordinaatit.dmsToDegrees(-5, -42, -53);
         double lat2 = Koordinaatit.dmsToDegrees(58, 38, 38);
         double lon2 = Koordinaatit.dmsToDegrees(-3, -4, -12);
+
+        double distanceFromDegrees = Koordinaatit.degreesToDistance(lat1, lon1, lat2, lon2);
+
+        // https://www.movable-type.co.uk/scripts/latlong.html
+        assertEquals(968.8535, distanceFromDegrees, EPSILON);
+
+        double[] NE1 = Projektiokaavat.degreesToMeters(lat1, lon1);
+        double[] NE2 = Projektiokaavat.degreesToMeters(lat2, lon2);
+
+        double N1 = NE1[0], E1 = NE1[1];
+        double N2 = NE2[0], E2 = NE2[1];
+
+        double distanceFromMeters = Koordinaatit.metersToDistance(N1, E1, N2, E2);
+        double k = Projektiokaavat.scaleCorrectionFromDegrees(lat1, lon1, lat2, lon2);
+
+        assertNotEquals(968.8535, distanceFromMeters, 0.1);
+        assertEquals(968.8535, distanceFromMeters / k, 0.1);
+    }
+
+    @Test
+    public void degreesToDistanceTest_2() {
+        double lat1 = 40.76;
+        double lon1 = -73.984;
+
+        double lat2 = 38.89;
+        double lon2 = -77.032;
+
         double distance = Koordinaatit.degreesToDistance(lat1, lon1, lat2, lon2);
 
-        assertEquals(968.8535, distance, EPSILON);
+        // https://www.nhc.noaa.gov/gccalc.shtml
+        assertEquals(333, distance, 1);
     }
 
     @Test
@@ -143,20 +173,6 @@ public class KoordinaatitTest {
         assertEquals(0, Math.floor(dms[0]), EPSILON);
         assertEquals(0, Math.floor(dms[1]), EPSILON);
         assertEquals(0, Math.round(dms[2]), EPSILON);
-    }
-
-    @Test
-    public void degreesToDistanceTest_1() {
-        double lat1 = 40.76;
-        double lon1 = -73.984;
-
-        double lat2 = 38.89;
-        double lon2 = -77.032;
-
-        double distance = Koordinaatit.degreesToDistance(lat1, lon1, lat2, lon2);
-
-        // https://www.nhc.noaa.gov/gccalc.shtml
-        assertEquals(333, distance, 1);
     }
 
     @Test

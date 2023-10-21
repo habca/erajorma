@@ -162,6 +162,83 @@ public class Projektiokaavat {
     }
 
     /**
+     * Mittakaavakorjaus ja pituuskorjaus JHS 197 EUREF-FIN.
+     * @param latitude
+     * @param longitude
+     * @return kerroin ellipsoidilta projektiotasolle
+     */
+    public static double scaleCorrectionFromDegrees(double latitude, double longitude) {
+
+        // Karttaprojektion parametrit:
+
+        double k_nolla = 0.9996;
+        double lambda_nolla = Math.toRadians(27); // 27 E
+
+        // Mittakaavakorjaus ja pituuskorjaus
+
+        double fii = Math.toRadians(latitude);
+        double lambda = Math.toRadians(longitude);
+
+        double l = lambda - lambda_nolla;
+        double k = k_nolla * (1.0 + 0.5 * Math.pow(Math.cos(fii), 2.0) * Math.pow(l, 2.0));
+        return k;
+    }
+
+    public static double scaleCorrectionFromDegrees(double lat1, double lon1, double lat2, double lon2) {
+        double k1 = scaleCorrectionFromDegrees(lat1, lon1);
+        double k2 = scaleCorrectionFromDegrees(lat2, lon2);
+
+        // Koordinaatit linjan puolivälissä.
+        double lat05 = lat1 + 0.5 * (lat2 - lat1);
+        double lon05 = lon1 + 0.5 * (lon2 - lon1);
+
+        // Mittakaavakerroin linjan puolessa välissä.
+        double km_m = scaleCorrectionFromDegrees(lat05, lon05);
+
+        double k = 1.0 / 6.0 * (k1 + 4.0 * km_m + k2);
+        return k;
+    }
+
+    @SuppressWarnings("ReassignedVariable")
+    public static double scaleCorrectionFromMeters(double N1, double E1, double E2) {
+
+        // GRS80-vertausellipsoidin parametrit:
+
+        double a = 6378137;
+        double b = 6356752.314140;
+        double f = 1 / 298.257222101;
+
+        // Karttaprojektion parametrit:
+
+        double k_nolla = 0.9996;
+        double E_nolla = 500000;
+
+        // Apusuureet:
+
+        double e_toiseen = (2.0 * f) - Math.pow(f, 2);
+        double e_pilkku_toiseen = e_toiseen / (1.0 - e_toiseen);
+
+        // Mittakaavakorjaus ja pituuskorjaus
+
+        E1 = E1 - E_nolla;
+        E2 = E2 - E_nolla;
+
+        double latitude = Projektiokaavat.metersToDegrees(N1, E1)[0];
+
+        double fii = Math.toRadians(latitude);
+        double V = Math.sqrt(1.0 + e_pilkku_toiseen * Math.pow(Math.cos(fii), 2.0));
+
+        double c = Math.pow(a, 2.0) / b;
+        double M =  c / Math.pow(V, 3.0);
+
+        double N = c / V;
+        double R = Math.sqrt(M * N);
+
+        double k = k_nolla * (1.0 + 1.0 / (6.0 * Math.pow(R, 2.0)) * (Math.pow(E1, 2.0) + E1 * E2 + Math.pow(E2, 2.0)));
+        return k;
+    }
+
+    /**
      * ETRS-TM35FIN correction of directional angle according to the JHS 197 EUREF-FIN.
      */
     @SuppressWarnings("ReassignedVariable")

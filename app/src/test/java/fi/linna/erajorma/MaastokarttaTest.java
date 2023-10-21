@@ -1,6 +1,7 @@
 package fi.linna.erajorma;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 
@@ -24,17 +25,14 @@ public class MaastokarttaTest {
 
     @Test
     public void getNakTest() {
-        getNakTest_MeridianConvergence(new PallasHettaOlos());
-        getNakTest_MeridianConvergence(new PyhaLuosto());
-
-        getNakTest_DirectionalAngle(new PallasHettaOlos());
-        getNakTest_DirectionalAngle(new PyhaLuosto());
+        getNakTest(new PallasHettaOlos());
+        getNakTest(new PyhaLuosto());
     }
 
     /**
      * Kartan napaluvun korjaus vakio (NAK) on riittävän tarkka eri karttaruuduissa.
      */
-    private void getNakTest_MeridianConvergence(AMaastokartta map) {
+    private void getNakTest(AMaastokartta map) {
         for (IKarttamerkki marker : map) {
             double latitude = Koordinaatit.dmsToDegrees(marker.getLatitude());
             double longitude = Koordinaatit.dmsToDegrees(marker.getLongitude());
@@ -49,10 +47,16 @@ public class MaastokarttaTest {
         }
     }
 
+    @Test
+    public void directionBetweenMarkersTest() {
+        directionBetweenMarkersTest(new PallasHettaOlos());
+        directionBetweenMarkersTest(new PyhaLuosto());
+    }
+
     /**
      * Kompassin suuntakulma on sama maastossa ja kartalla.
      */
-    private void getNakTest_DirectionalAngle(AMaastokartta map) {
+    private void directionBetweenMarkersTest(AMaastokartta map) {
         for (int i = 1; i < map.size(); i ++) {
             IKarttamerkki marker0 = map.get(i - 1);
             IKarttamerkki marker1 = map.get(i);
@@ -85,6 +89,55 @@ public class MaastokarttaTest {
 
             // delta = azimuthFromDegrees (+ nak) - azimuthFromMeters
             assertEquals(azimuthFromDegrees + nak_marker, angle - delta, 0.1);
+        }
+    }
+
+    @Test
+    public void distanceBetweenMarkersTest() {
+        distanceBetweenMarkersTest(new PallasHettaOlos());
+        distanceBetweenMarkersTest(new PyhaLuosto());
+    }
+
+    /**
+     * Kohteen etäisyys on sama maastossa ja kartalla.
+     */
+    private void distanceBetweenMarkersTest(AMaastokartta map) {
+        for (int i = 1; i < map.size(); i ++) {
+            IKarttamerkki marker0 = map.get(i - 1);
+            IKarttamerkki marker1 = map.get(i);
+
+            double lat1 = Koordinaatit.dmsToDegrees(marker0.getLatitude());
+            double lon1 = Koordinaatit.dmsToDegrees(marker0.getLongitude());
+            double lat2 = Koordinaatit.dmsToDegrees(marker1.getLatitude());
+            double lon2 = Koordinaatit.dmsToDegrees(marker1.getLongitude());
+
+            double distanceFromDegrees = Koordinaatit.degreesToDistance(lat1, lon1, lat2, lon2);
+
+            double N1 = marker0.getNorth();
+            double E1 = marker0.getEast();
+            double N2 = marker1.getNorth();
+            double E2 = marker1.getEast();
+
+            double distanceFromMeters = Koordinaatit.metersToDistance(N1, E1, N2, E2);
+
+            double k1 = Projektiokaavat.scaleCorrectionFromDegrees(lat1, lon1);
+            double k2 = Projektiokaavat.scaleCorrectionFromDegrees(lat2, lon2);
+            double k3 = Projektiokaavat.scaleCorrectionFromDegrees(lat1, lon1, lat2, lon2);
+            double k4 = Projektiokaavat.scaleCorrectionFromMeters(N1, E1, E2);
+            double k5 = Projektiokaavat.scaleCorrectionFromMeters(N2, E1, E2);
+
+            assertEquals(k1, k2, 0.0001);
+            assertEquals(k2, k3, 0.0001);
+            assertEquals(k3, k4, 0.0001);
+            assertEquals(k4, k5, 0.0001);
+            assertEquals(k5, k1, 0.0001);
+
+            // Matkat autiotupien välillä ovat niin lyhyitä, ettei kerroin juuri vaikuta.
+            assertEquals(distanceFromMeters, distanceFromDegrees * k1, 0.5);
+            assertEquals(distanceFromMeters, distanceFromDegrees * k2, 0.5);
+            assertEquals(distanceFromMeters, distanceFromDegrees * k3, 0.5);
+            assertEquals(distanceFromMeters, distanceFromDegrees * k4, 0.5);
+            assertEquals(distanceFromMeters, distanceFromDegrees * k5, 0.5);
         }
     }
 }

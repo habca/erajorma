@@ -290,6 +290,40 @@ public class ProjektiokaavatTest {
     }
 
     @Test
+    public void scaleCorrectionFromDegreesTest() {
+
+        // Karttaprojektion parametrit:
+
+        double k_nolla = 0.9996;
+        double lambda_nolla = Math.toRadians(27); // 27 E
+
+        // Mittakaavakorjaus ja pituuskorjaus
+
+        double fii = 1.053918934084532;
+        double lambda = 0.346415337004409;
+
+        double l = lambda - lambda_nolla;
+        assertEquals(-0.124823561034060, l, 0.000000000000001);
+
+        double k = k_nolla * (1.0 + 0.5 * Math.pow(Math.cos(fii), 2.0) * Math.pow(l, 2.0));
+        assertEquals(1.001501684, k, 0.000000001);
+
+        double latitude = Math.toDegrees(fii);
+        assertEquals(60.3851068722, latitude, 0.000000001);
+
+        double longitude = Math.toDegrees(lambda);
+        assertEquals(19.84813676944, longitude, 0.000000001);
+
+        double[] NE = Projektiokaavat.degreesToMeters(latitude, longitude);
+        assertEquals(6715706.37708, NE[0], 0.0001);
+        assertEquals(106256.35961, NE[1], 0.0001);
+
+        assertEquals(k, Projektiokaavat.scaleCorrectionFromDegrees(latitude, longitude), 0.000000001);
+        assertEquals(k, Projektiokaavat.scaleCorrectionFromDegrees(latitude, longitude, latitude, longitude), 0.000000001);
+        assertEquals(k, Projektiokaavat.scaleCorrectionFromMeters(NE[0], NE[1], NE[1]), 0.01);
+    }
+
+    @Test
     public void degreesToUtmTest() {
 
         double latitude = Koordinaatit.dmsToDegrees(40, 30, 0);
